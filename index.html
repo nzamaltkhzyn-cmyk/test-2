@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الخزنة - الإصدار النهائي (مصحح)</title>
+    <title>الخزنة</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -107,11 +107,10 @@
     <!-- ======================= JAVASCRIPT LOGIC (CLEANED and CORRECTED) ======================= -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-
         // --- 1. SETUP ---
-        const SUPABASE_URL = 'https://inexkigotfyhsprhbqyn.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZXhraWdvdGZ5aHNwcmhicXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNTc4NDcsImV4cCI6MjA3MTYzMzg0N30.nkDBDL-BFHaTJAUdxzXrPqOzpWonDyr2jkKO2S_UwbU';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // التعديل الثاني: استخدام المتغيرات من ملف config.js بدلاً من كتابتها هنا مباشرة
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
         // --- 2. DOM ELEMENTS ---
         const views = { auth: document.getElementById('auth-view'), main: document.getElementById('main-view'), folderContent: document.getElementById('folder-content-view'), mediaViewer: document.getElementById('media-viewer') };
