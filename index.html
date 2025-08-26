@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الخزنة - الإصدار النهائي (مصحح)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ======================= CSS STYLES ======================= -->
+    <style>
+        :root {
+            --primary-color-light: #4A90E2; --primary-hover-light: #357ABD;
+            --background-color-light: #f4f7f9; --surface-color-light: #ffffff;
+            --text-color-light: #333; --text-light-light: #777; --border-color-light: #e0e6ed;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); --shadow-hover-light: 0 6px 16px rgba(0, 0, 0, 0.12);
+            --glass-background-light: rgba(255, 255, 255, 0.6); --glass-border-light: rgba(255, 255, 255, 0.3);
+            --glass-shadow-light: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --primary-color-dark: #66B2FF; --primary-hover-dark: #4D94DB;
+            --background-color-dark: #1A202C; --surface-color-dark: #2D3748;
+            --text-color-dark: #E2E8F0; --text-light-dark: #A0AEC0; --border-color-dark: #4A5568;
+            --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3); --shadow-hover-dark: 0 6px 16px rgba(0, 0, 0, 0.4);
+            --glass-background-dark: rgba(45, 55, 72, 0.6); --glass-border-dark: rgba(74, 85, 104, 0.3);
+            --glass-shadow-dark: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            --danger-color: #e74c3c; --danger-hover: #c0392b;
+        }
+        body.theme-light {
+            --primary-color: var(--primary-color-light); --primary-hover: var(--primary-hover-light);
+            --background-color: var(--background-color-light); --surface-color: var(--surface-color-light);
+            --text-color: var(--text-color-light); --text-light: var(--text-light-light);
+            --border-color: var(--border-color-light); --shadow: var(--shadow-light); --shadow-hover: var(--shadow-hover-light);
+            --glass-background: var(--glass-background-light); --glass-border: var(--glass-border-light); --glass-shadow: var(--glass-shadow-light);
+        }
+        body.theme-dark {
+            --primary-color: var(--primary-color-dark); --primary-hover: var(--primary-hover-dark);
+            --background-color: var(--background-color-dark); --surface-color: var(--surface-color-dark);
+            --text-color: var(--text-color-dark); --text-light: var(--text-light-dark);
+            --border-color: var(--border-color-dark); --shadow: var(--shadow-dark); --shadow-hover: var(--shadow-hover-dark);
+            --glass-background: var(--glass-background-dark); --glass-border: var(--glass-border-dark); --glass-shadow: var(--glass-shadow-dark);
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Tajawal', sans-serif; margin: 0; background-color: var(--background-color); color: var(--text-color); direction: rtl; transition: background-color 0.3s ease, color 0.3s ease; min-height: 100vh; display: flex; flex-direction: column; }
+        .view { flex-grow: 1; display: flex; flex-direction: column; padding-bottom: 70px; }
+        .hidden { display: none !important; }
+        header { padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.8rem; transition: background-color 0.3s ease, border-color 0.3s ease; }
+        .glassmorphism-header { background: var(--glass-background); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
+        header h1 { color: var(--primary-color); margin: 0; font-size: 1.5rem; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; }
+        .header-controls { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: flex-end; flex-grow: 1; }
+        main { padding: 1.5rem; flex-grow: 1; overflow-y: auto; }
+        #auth-view { justify-content: center; align-items: center; padding: 1rem; background: linear-gradient(135deg, var(--primary-color) 0%, var(--background-color) 100%); }
+        .auth-container { padding: 2rem; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; margin-top: 1rem; transition: background 0.3s ease, box-shadow 0.3s ease; }
+        .glassmorphism-card { background: var(--glass-background); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
+        .auth-container h2 { margin-top: 0; margin-bottom: 1.5rem; font-weight: 700; font-size: 1.8rem; color: var(--text-color); }
+        .auth-container p { margin-top: 1rem; font-size: 0.95rem; }
+        .auth-container a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+        form input, form textarea, form select { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; font-family: 'Tajawal', sans-serif; transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s, color 0.3s; background-color: var(--surface-color); color: var(--text-color); }
+        form input:focus, form textarea:focus, form select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); }
+        form label { display: block; text-align: right; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-color); font-size: 0.95rem; }
+        button, .btn { padding: 0.9rem 1.8rem; border: none; border-radius: 10px; cursor: pointer; font-size: 1.05rem; font-weight: 500; font-family: 'Tajawal', sans-serif; transition: background-color 0.2s, transform 0.1s, color 0.2s, border-color 0.2s; white-space: nowrap; }
+        button:hover { transform: translateY(-2px); }
+        .primary-btn, form button[type="submit"] { background-color: var(--primary-color); color: #fff; width: 100%; margin-top: 1.2rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .secondary-btn { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-color); }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.8rem; }
+        .toolbar h2 { margin: 0; flex-shrink: 0; font-size: 1.6rem; color: var(--text-color); }
+        .toolbar .primary-btn { width: auto; margin-top: 0; flex-shrink: 0; padding: 0.8rem 1.2rem; font-size: 0.95rem; }
+        #search-input { min-width: unset; width: 100%; flex-grow: 1; padding: 0.9rem; border-radius: 10px; border: 1px solid var(--border-color); background-color: var(--surface-color); color: var(--text-color); margin-top: 0.5rem; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+        .card { background-color: var(--surface-color); border-radius: 12px; box-shadow: var(--shadow); padding: 1rem; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; border: 1px solid transparent; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--primary-color); }
+        .card h4 { margin-top: 0; margin-bottom: 0.4rem; word-break: break-word; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 0.4rem; color: var(--text-color); }
+        .card p { color: var(--text-light); font-size: 0.85rem; flex-grow: 1; line-height: 1.4; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-light); padding-top: 0.8rem; margin-top: 0.8rem; border-top: 1px solid var(--border-color); }
+        .card-actions button { background: none; border: none; cursor: pointer; padding: 0.4rem; font-size: 1rem; border-radius: 50%; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; transition: background-color 0.2s, color 0.2s; color: var(--text-light); }
+        .modal { position: fixed; z-index: 1000; inset: 0; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; padding: 1rem; animation: fadeIn 0.3s ease-out; }
+        .modal-content { padding: 2rem; border-radius: 16px; width: 100%; max-width: 450px; position: relative; animation: scaleUp 0.3s ease-out; }
+        .modal-content h3 { color: var(--text-color); font-size: 1.5rem; margin-bottom: 1.5rem; }
+        .close-button { position: absolute; top: 12px; left: 12px; font-size: 1.4rem; line-height: 1; cursor: pointer; background-color: var(--border-color); border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; color: var(--text-light); }
+        #loading-spinner { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .spinner { border: 6px solid var(--border-color); border-top: 6px solid var(--primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .bottom-nav { display: flex; justify-content: space-around; align-items: center; position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: var(--glass-background); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05); z-index: 900; }
+        .bottom-nav .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; background: none; border: none; color: var(--text-light); font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: color 0.2s ease; }
+        .bottom-nav .nav-item .fas { font-size: 1.4rem; margin-bottom: 3px; }
+        .bottom-nav .nav-item.active { color: var(--primary-color); }
+        #media-viewer { background-color: var(--background-color); }
+        .media-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 1rem; }
+        #image-display, #video-display { max-width: 100%; max-height: calc(100vh - 150px); object-fit: contain; border-radius: 8px; box-shadow: var(--shadow); }
+        #text-display { width: 100%; height: 100%; background: var(--surface-color); padding: 1.5rem; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; text-align: right; overflow-y: auto; font-size: 1.1rem; line-height: 1.6; }
+        @media (min-width: 769px) { .bottom-nav { display: none; } .view { padding-bottom: 0; } header, main { padding-left: 2.5rem; padding-right: 2.5rem; } .grid-container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; } #search-input { width: auto; min-width: 300px; margin-top: 0; } }
+    </style>
+</head>
+<body class="theme-light">
+
+    <!-- ======================= HTML BODY CONTENT ======================= -->
+    <div id="auth-view" class="view"><div class="auth-container glassmorphism-card"><div id="login-form-container"><h2>تسجيل الدخول</h2><form id="login-form"><input type="email" id="login-email" placeholder="البريد الإلكتروني" required><input type="password" id="login-password" placeholder="كلمة المرور" required><button type="submit" class="primary-btn">دخول</button></form><p>ليس لديك حساب؟ <a href="#" id="show-signup">أنشئ حسابًا</a></p></div><div id="signup-container" style="display: none;"><h2>حساب جديد</h2><form id="signup-form"><input type="email" id="signup-email" placeholder="البريد الإلكتروني" required><input type="password" id="signup-password" placeholder="كلمة المرور" required><button type="submit" class="primary-btn">تسجيل</button></form><p>لديك حساب؟ <a href="#" id="show-login">سجل الدخول</a></p></div></div></div>
+    <div id="main-view" class="view hidden"><header class="glassmorphism-header"><h1>الخزنة</h1><div class="header-controls"><input type="search" id="search-input" placeholder="ابحث..."><button id="logout-button" class="secondary-btn">تسجيل الخروج</button></div></header><main><div class="toolbar"><h2>مجلداتك</h2><button id="add-folder-button" class="primary-btn"><i class="fas fa-plus"></i> مجلد جديد</button></div><div id="folders-list" class="grid-container"></div></main><nav class="bottom-nav"><button class="nav-item active" data-view="folders"><i class="fas fa-folder"></i><span>المجلدات</span></button></nav></div>
+    <div id="folder-content-view" class="view hidden"><header class="glassmorphism-header"><button class="back-button"><i class="fas fa-arrow-right"></i></button><h1 id="current-folder-name"></h1></header><main><div class="toolbar"><h2 id="folder-content-title"></h2><button id="add-file-button" class="primary-btn"><i class="fas fa-plus"></i> إضافة عنصر</button></div><div id="files-list" class="grid-container"></div></main></div>
+    <div id="media-viewer" class="view hidden"><header class="glassmorphism-header"><button class="back-button-media"><i class="fas fa-arrow-right"></i></button><h1 id="media-title"></h1></header><main class="media-container"><div id="image-viewer" class="hidden"><img id="image-display" src="" alt="صورة"></div><div id="video-viewer" class="hidden"><video id="video-display" controls></video></div><div id="text-viewer" class="hidden"><pre id="text-display"></pre></div></main></div>
+    <div id="folder-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3 id="modal-title"></h3><form id="folder-form"><input type="hidden" id="folder-id"><label for="folder-name">اسم المجلد:</label><input type="text" id="folder-name" required><label for="folder-description">وصف:</label><textarea id="folder-description" rows="3"></textarea><button type="submit" class="primary-btn">حفظ</button></form></div></div>
+    <div id="file-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3>إضافة عنصر</h3><form id="file-form"><label for="file-name">اسم العنصر:</label><input type="text" id="file-name" required><label for="file-type">النوع:</label><select id="file-type"><option value="note">ملاحظة</option><option value="image">صورة</option><option value="video">فيديو</option></select><div id="note-content-wrapper"><label for="note-content">المحتوى:</label><textarea id="note-content" rows="5"></textarea></div><div id="file-upload-wrapper" class="hidden"><label for="file-upload">اختر ملف:</label><input type="file" id="file-upload"></div><button type="submit" class="primary-btn">حفظ</button></form></div></div>
+    <div id="loading-spinner" class="hidden"><div class="spinner"></div></div>
+
+    <!-- ======================= JAVASCRIPT LOGIC (CLEANED and CORRECTED) ======================= -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- 1. SETUP ---
+        const SUPABASE_URL = 'https://inexkigotfyhsprhbqyn.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZXhraWdvdGZ5aHNwcmhicXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNTc4NDcsImV4cCI6MjA3MTYzMzg0N30.nkDBDL-BFHaTJAUdxzXrPqOzpWonDyr2jkKO2S_UwbU';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // --- 2. DOM ELEMENTS ---
+        const views = { auth: document.getElementById('auth-view'), main: document.getElementById('main-view'), folderContent: document.getElementById('folder-content-view'), mediaViewer: document.getElementById('media-viewer') };
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const showSignupLink = document.getElementById('show-signup');
+        const showLoginLink = document.getElementById('show-login');
+        const signupContainer = document.getElementById('signup-container');
+        const logoutButtons = document.querySelectorAll('#logout-button');
+        const foldersList = document.getElementById('folders-list');
+        const addFolderButton = document.getElementById('add-folder-button');
+        const folderModal = document.getElementById('folder-modal');
+        const folderForm = document.getElementById('folder-form');
+        const folderIdInput = document.getElementById('folder-id');
+        const folderNameInput = document.getElementById('folder-name');
+        const folderDescriptionInput = document.getElementById('folder-description');
+        const modalTitle = document.getElementById('modal-title');
+        const currentFolderName = document.getElementById('current-folder-name');
+        const filesList = document.getElementById('files-list');
+        const addFileButton = document.getElementById('add-file-button');
+        const fileModal = document.getElementById('file-modal');
+        const fileForm = document.getElementById('file-form');
+        const fileNameInput = document.getElementById('file-name');
+        const fileTypeSelect = document.getElementById('file-type');
+        const noteContentWrapper = document.getElementById('note-content-wrapper');
+        const noteContentInput = document.getElementById('note-content');
+        const fileUploadWrapper = document.getElementById('file-upload-wrapper');
+        const fileUploadInput = document.getElementById('file-upload');
+        const searchInput = document.getElementById('search-input');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const closeButtons = document.querySelectorAll('.close-button');
+        const mediaTitle = document.getElementById('media-title');
+        const imageViewer = document.getElementById('image-viewer');
+        const videoViewer = document.getElementById('video-viewer');
+        const textViewer = document.getElementById('text-viewer');
+        const imageDisplay = document.getElementById('image-display');
+        const videoDisplay = document.getElementById('video-display');
+        const textDisplay = document.getElementById('text-display');
+
+        // --- 3. APP STATE ---
+        let currentUser = null;
+        let currentFolderId = null;
+        let filesCache = [];
+
+        // --- 4. FUNCTIONS ---
+
+        // Utility
+        const showView = (viewName) => { Object.values(views).forEach(v => v.classList.add('hidden')); if(views[viewName]) views[viewName].classList.remove('hidden'); };
+        const showLoading = () => loadingSpinner.classList.remove('hidden');
+        const hideLoading = () => loadingSpinner.classList.add('hidden');
+
+        // Navigation
+        const setupNavigation = () => {
+            document.querySelectorAll('.back-button').forEach(btn => btn.addEventListener('click', () => showView('main')));
+            document.querySelector('.back-button-media').addEventListener('click', () => {
+                videoDisplay.pause();
+                videoDisplay.src = '';
+                showView('folderContent');
+            });
+        };
+        
+        // Authentication
+        const checkUser = async () => {
+            showLoading();
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            hideLoading();
+            if (session) {
+                currentUser = session.user;
+                showView('main');
+                await fetchFolders();
+            } else {
+                currentUser = null;
+                showView('auth');
+            }
+        };
+
+        // Folder Management
+        const fetchFolders = async (searchTerm = '') => {
+            showLoading();
+            let query = supabaseClient.from('folders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+            if (searchTerm) query = query.ilike('name', `%${searchTerm}%`);
+            const { data: folders, error } = await query;
+            hideLoading();
+            if (error) console.error('Error fetching folders:', error); else renderFolders(folders);
+        };
+
+        const renderFolders = (folders) => {
+            foldersList.innerHTML = '';
+            if (!folders || folders.length === 0) { foldersList.innerHTML = '<p>لا يوجد مجلدات.</p>'; return; }
+            folders.forEach(folder => {
+                const folderEl = document.createElement('div');
+                folderEl.className = 'card';
+                folderEl.dataset.id = folder.id;
+                folderEl.dataset.name = folder.name;
+                folderEl.innerHTML = `<h4><i class="fas fa-folder" style="color: #4A90E2;"></i> ${folder.name}</h4><p>${folder.description || 'لا يوجد وصف'}</p><div class="card-footer"><span>${new Date(folder.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="edit-folder" title="تعديل"><i class="fas fa-pen"></i></button><button class="delete-folder" title="حذف"><i class="fas fa-trash"></i></button></div></div>`;
+                folderEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openFolder(folder.id, folder.name); });
+                foldersList.appendChild(folderEl);
+            });
+        };
+
+        const openFolder = (folderId, folderName) => {
+            currentFolderId = folderId;
+            showView('folderContent');
+            currentFolderName.textContent = folderName;
+            document.getElementById('folder-content-title').textContent = `محتويات: ${folderName}`;
+            fetchFiles(folderId);
+        };
+        
+        // File Management
+        const fetchFiles = async (folderId) => {
+            showLoading();
+            const { data: files, error } = await supabaseClient.from('files').select('*').eq('folder_id', folderId).order('created_at', { ascending: false });
+            hideLoading();
+            if (error) { console.error('Error fetching files:', error); return; }
+            filesCache = files;
+            renderFiles(files);
+        };
+
+        const renderFiles = (files) => {
+            filesList.innerHTML = '';
+            if (!files || files.length === 0) { filesList.innerHTML = '<p>هذا المجلد فارغ.</p>'; return; }
+            files.forEach(file => {
+                const icon = file.type === 'note' ? 'fa-sticky-note' : (file.type === 'image' ? 'fa-image' : 'fa-video');
+                const fileEl = document.createElement('div');
+                fileEl.className = 'card';
+                fileEl.dataset.id = file.id;
+                fileEl.innerHTML = `<h4><i class="fas ${icon}"></i> ${file.name}</h4><p>${file.type === 'note' ? ((file.content || '').substring(0, 50) + '...') : `ملف ${file.type}`}</p><div class="card-footer"><span>${new Date(file.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="delete-file"><i class="fas fa-trash"></i></button></div></div>`;
+                fileEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openMediaViewer(file.id); });
+                filesList.appendChild(fileEl);
+            });
+        };
+        
+        const openMediaViewer = async (fileId) => {
+            const file = filesCache.find(f => f.id === fileId);
+            if (!file) return;
+
+            mediaTitle.textContent = file.name;
+            imageViewer.classList.add('hidden');
+            videoViewer.classList.add('hidden');
+            textViewer.classList.add('hidden');
+            showView('mediaViewer');
+
+            if (file.type === 'image' || file.type === 'video') {
+                showLoading();
+                const { data, error } = await supabaseClient.storage.from('uploads').createSignedUrl(file.file_path, 3600);
+                hideLoading();
+                if (error) { alert('خطأ في إنشاء رابط العرض: ' + error.message); return; }
+                if (data && data.signedUrl) {
+                    if (file.type === 'image') { imageDisplay.src = data.signedUrl; imageViewer.classList.remove('hidden'); } 
+                    else { videoDisplay.src = data.signedUrl; videoViewer.classList.remove('hidden'); }
+                }
+            } else if (file.type === 'note') {
+                textDisplay.textContent = file.content;
+                textViewer.classList.remove('hidden');
+            }
+        };
+
+        // --- 5. EVENT LISTENERS ---
+
+        // Auth
+        loginForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); hideLoading(); if (error) alert(error.message); else await checkUser(); });
+        signupForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('signup-email').value; const password = document.getElementById('signup-password').value; const { error } = await supabaseClient.auth.signUp({ email, password }); hideLoading(); if (error) alert(error.message); else alert('تم إرسال رابط تأكيد إلى بريدك الإلكتروني!'); });
+        logoutButtons.forEach(btn => btn.addEventListener('click', async () => { showLoading(); await supabaseClient.auth.signOut(); hideLoading(); await checkUser(); }));
+        showSignupLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'block'; loginForm.parentElement.style.display = 'none'; });
+        showLoginLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'none'; loginForm.parentElement.style.display = 'block'; });
+        
+        // Folders
+        addFolderButton.addEventListener('click', () => { folderForm.reset(); folderIdInput.value = ''; modalTitle.textContent = 'مجلد جديد'; folderModal.classList.remove('hidden'); });
+        folderForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const folderData = { name: folderNameInput.value, description: folderDescriptionInput.value, user_id: currentUser.id }; const { error } = folderIdInput.value ? await supabaseClient.from('folders').update(folderData).eq('id', folderIdInput.value) : await supabaseClient.from('folders').insert(folderData); hideLoading(); if (error) alert(error.message); else { folderModal.classList.add('hidden'); await fetchFolders(); } });
+        foldersList.addEventListener('click', async (e) => { const button = e.target.closest('button'); if (!button) return; const card = button.closest('.card'); const id = card.dataset.id; if (button.classList.contains('edit-folder')) { const { data: folder } = await supabaseClient.from('folders').select('*').eq('id', id).single(); if (folder) { folderIdInput.value = folder.id; folderNameInput.value = folder.name; folderDescriptionInput.value = folder.description; modalTitle.textContent = 'تعديل المجلد'; folderModal.classList.remove('hidden'); } } if (button.classList.contains('delete-folder')) { if (confirm('هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟')) { showLoading(); await supabaseClient.from('files').delete().eq('folder_id', id); await supabaseClient.from('folders').delete().eq('id', id); hideLoading(); await fetchFolders(); } } });
+        
+        // Files
+        addFileButton.addEventListener('click', () => { fileForm.reset(); fileModal.classList.remove('hidden'); noteContentWrapper.classList.remove('hidden'); fileUploadWrapper.classList.add('hidden'); });
+        fileTypeSelect.addEventListener('change', () => { const isNote = fileTypeSelect.value === 'note'; noteContentWrapper.classList.toggle('hidden', !isNote); fileUploadWrapper.classList.toggle('hidden', isNote); });
+        fileForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const fileData = { name: fileNameInput.value, type: fileTypeSelect.value, folder_id: currentFolderId, user_id: currentUser.id }; if (fileData.type !== 'note') { const file = fileUploadInput.files[0]; if (!file) { alert('الرجاء اختيار ملف للرفع.'); hideLoading(); return; } const filePath = `${currentUser.id}/${currentFolderId}/${Date.now()}-${file.name}`; const { error } = await supabaseClient.storage.from('uploads').upload(filePath, file); if (error) { alert('خطأ في رفع الملف: ' + error.message); hideLoading(); return; } fileData.file_path = filePath; } else { fileData.content = noteContentInput.value; } const { error: insertError } = await supabaseClient.from('files').insert(fileData); hideLoading(); if (insertError) alert('خطأ في حفظ البيانات: ' + insertError.message); else { fileModal.classList.add('hidden'); await fetchFiles(currentFolderId); } });
+        filesList.addEventListener('click', async (e) => { const button = e.target.closest('.delete-file'); if (!button) return; const card = button.closest('.card'); const file = filesCache.find(f => f.id === card.dataset.id); if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) { showLoading(); if (file.file_path) { await supabaseClient.storage.from('uploads').remove([file.file_path]); } await supabaseClient.from('files').delete().eq('id', file.id); hideLoading(); await fetchFiles(currentFolderId); } });
+        
+        // General
+        searchInput.addEventListener('input', (e) => fetchFolders(e.target.value));
+        closeButtons.forEach(btn => { btn.addEventListener('click', () => { folderModal.classList.add('hidden'); fileModal.classList.add('hidden'); }); });
+        
+        // --- 6. INITIALIZATION ---
+        setupNavigation();
+        checkUser();
+
+    });
+    </script>
+</body>
+</html>
