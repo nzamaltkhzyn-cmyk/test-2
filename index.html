@@ -1,13 +1,20 @@
 <!DOCTYPE html>
+<!-- The lang and dir attributes will be updated by JavaScript -->
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الخزنة</title>
+    <!-- The title will be updated by JavaScript -->
+    <title>الخزنة - الإصدار النهائي (مصحح)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font for English -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font for Hebrew -->
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -43,13 +50,19 @@
             --glass-background: var(--glass-background-dark); --glass-border: var(--glass-border-dark); --glass-shadow: var(--glass-shadow-dark);
         }
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Tajawal', sans-serif; margin: 0; background-color: var(--background-color); color: var(--text-color); direction: rtl; transition: background-color 0.3s ease, color 0.3s ease; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Language-specific font families */
+        html[lang="ar"] body, html[lang="ar"] button, html[lang="ar"] input, html[lang="ar"] textarea, html[lang="ar"] select { font-family: 'Tajawal', sans-serif; }
+        html[lang="en"] body, html[lang="en"] button, html[lang="en"] input, html[lang="en"] textarea, html[lang="en"] select { font-family: 'Roboto', sans-serif; }
+        html[lang="he"] body, html[lang="he"] button, html[lang="he"] input, html[lang="he"] textarea, html[lang="he"] select { font-family: 'Heebo', sans-serif; }
+
+        body { margin: 0; background-color: var(--background-color); color: var(--text-color); transition: background-color 0.3s ease, color 0.3s ease; min-height: 100vh; display: flex; flex-direction: column; }
         .view { flex-grow: 1; display: flex; flex-direction: column; padding-bottom: 70px; }
         .hidden { display: none !important; }
         header { padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 0.8rem; transition: background-color 0.3s ease, border-color 0.3s ease; }
         .glassmorphism-header { background: var(--glass-background); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
         header h1 { color: var(--primary-color); margin: 0; font-size: 1.5rem; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; }
-        .header-controls { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: flex-end; flex-grow: 1; }
+        .header-controls { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: flex-end; flex-grow: 1; align-items: center; }
         main { padding: 1.5rem; flex-grow: 1; overflow-y: auto; }
         #auth-view { justify-content: center; align-items: center; padding: 1rem; background: linear-gradient(135deg, var(--primary-color) 0%, var(--background-color) 100%); }
         .auth-container { padding: 2rem; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; margin-top: 1rem; transition: background 0.3s ease, box-shadow 0.3s ease; }
@@ -57,10 +70,12 @@
         .auth-container h2 { margin-top: 0; margin-bottom: 1.5rem; font-weight: 700; font-size: 1.8rem; color: var(--text-color); }
         .auth-container p { margin-top: 1rem; font-size: 0.95rem; }
         .auth-container a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
-        form input, form textarea, form select { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; font-family: 'Tajawal', sans-serif; transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s, color 0.3s; background-color: var(--surface-color); color: var(--text-color); }
+        form input, form textarea, form select { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 10px; font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s, color 0.3s; background-color: var(--surface-color); color: var(--text-color); }
         form input:focus, form textarea:focus, form select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); }
-        form label { display: block; text-align: right; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-color); font-size: 0.95rem; }
-        button, .btn { padding: 0.9rem 1.8rem; border: none; border-radius: 10px; cursor: pointer; font-size: 1.05rem; font-weight: 500; font-family: 'Tajawal', sans-serif; transition: background-color 0.2s, transform 0.1s, color 0.2s, border-color 0.2s; white-space: nowrap; }
+        form label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-color); font-size: 0.95rem; }
+        html[dir="rtl"] form label { text-align: right; }
+        html[dir="ltr"] form label { text-align: left; }
+        button, .btn { padding: 0.9rem 1.8rem; border: none; border-radius: 10px; cursor: pointer; font-size: 1.05rem; font-weight: 500; transition: background-color 0.2s, transform 0.1s, color 0.2s, border-color 0.2s; white-space: nowrap; }
         button:hover { transform: translateY(-2px); }
         .primary-btn, form button[type="submit"] { background-color: var(--primary-color); color: #fff; width: 100%; margin-top: 1.2rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
         .secondary-btn { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-color); }
@@ -78,7 +93,9 @@
         .modal { position: fixed; z-index: 1000; inset: 0; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; padding: 1rem; animation: fadeIn 0.3s ease-out; }
         .modal-content { padding: 2rem; border-radius: 16px; width: 100%; max-width: 450px; position: relative; animation: scaleUp 0.3s ease-out; }
         .modal-content h3 { color: var(--text-color); font-size: 1.5rem; margin-bottom: 1.5rem; }
-        .close-button { position: absolute; top: 12px; left: 12px; font-size: 1.4rem; line-height: 1; cursor: pointer; background-color: var(--border-color); border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; color: var(--text-light); }
+        .close-button { position: absolute; top: 12px; font-size: 1.4rem; line-height: 1; cursor: pointer; background-color: var(--border-color); border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; color: var(--text-light); }
+        html[dir="rtl"] .close-button { left: 12px; }
+        html[dir="ltr"] .close-button { right: 12px; }
         #loading-spinner { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .spinner { border: 6px solid var(--border-color); border-top: 6px solid var(--primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -89,24 +106,154 @@
         #media-viewer { background-color: var(--background-color); }
         .media-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 1rem; }
         #image-display, #video-display { max-width: 100%; max-height: calc(100vh - 150px); object-fit: contain; border-radius: 8px; box-shadow: var(--shadow); }
-        #text-display { width: 100%; height: 100%; background: var(--surface-color); padding: 1.5rem; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; text-align: right; overflow-y: auto; font-size: 1.1rem; line-height: 1.6; }
+        #text-display { width: 100%; height: 100%; background: var(--surface-color); padding: 1.5rem; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; overflow-y: auto; font-size: 1.1rem; line-height: 1.6; }
+        html[dir="rtl"] #text-display { text-align: right; }
+        html[dir="ltr"] #text-display { text-align: left; }
+        .lang-switcher button { padding: 0.5rem 0.8rem; font-size: 0.9rem; border: 1px solid var(--border-color); background-color: transparent; color: var(--text-color); cursor: pointer; }
+        .lang-switcher button.active { background-color: var(--primary-color); color: #fff; border-color: var(--primary-color); }
         @media (min-width: 769px) { .bottom-nav { display: none; } .view { padding-bottom: 0; } header, main { padding-left: 2.5rem; padding-right: 2.5rem; } .grid-container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; } #search-input { width: auto; min-width: 300px; margin-top: 0; } }
     </style>
 </head>
 <body class="theme-light">
 
     <!-- ======================= HTML BODY CONTENT ======================= -->
-    <div id="auth-view" class="view"><div class="auth-container glassmorphism-card"><div id="login-form-container"><h2>تسجيل الدخول</h2><form id="login-form"><input type="email" id="login-email" placeholder="البريد الإلكتروني" required><input type="password" id="login-password" placeholder="كلمة المرور" required><button type="submit" class="primary-btn">دخول</button></form><p>ليس لديك حساب؟ <a href="#" id="show-signup">أنشئ حسابًا</a></p></div><div id="signup-container" style="display: none;"><h2>حساب جديد</h2><form id="signup-form"><input type="email" id="signup-email" placeholder="البريد الإلكتروني" required><input type="password" id="signup-password" placeholder="كلمة المرور" required><button type="submit" class="primary-btn">تسجيل</button></form><p>لديك حساب؟ <a href="#" id="show-login">سجل الدخول</a></p></div></div></div>
-    <div id="main-view" class="view hidden"><header class="glassmorphism-header"><h1>الخزنة</h1><div class="header-controls"><input type="search" id="search-input" placeholder="ابحث..."><button id="logout-button" class="secondary-btn">تسجيل الخروج</button></div></header><main><div class="toolbar"><h2>مجلداتك</h2><button id="add-folder-button" class="primary-btn"><i class="fas fa-plus"></i> مجلد جديد</button></div><div id="folders-list" class="grid-container"></div></main><nav class="bottom-nav"><button class="nav-item active" data-view="folders"><i class="fas fa-folder"></i><span>المجلدات</span></button></nav></div>
-    <div id="folder-content-view" class="view hidden"><header class="glassmorphism-header"><button class="back-button"><i class="fas fa-arrow-right"></i></button><h1 id="current-folder-name"></h1></header><main><div class="toolbar"><h2 id="folder-content-title"></h2><button id="add-file-button" class="primary-btn"><i class="fas fa-plus"></i> إضافة عنصر</button></div><div id="files-list" class="grid-container"></div></main></div>
-    <div id="media-viewer" class="view hidden"><header class="glassmorphism-header"><button class="back-button-media"><i class="fas fa-arrow-right"></i></button><h1 id="media-title"></h1></header><main class="media-container"><div id="image-viewer" class="hidden"><img id="image-display" src="" alt="صورة"></div><div id="video-viewer" class="hidden"><video id="video-display" controls></video></div><div id="text-viewer" class="hidden"><pre id="text-display"></pre></div></main></div>
-    <div id="folder-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3 id="modal-title"></h3><form id="folder-form"><input type="hidden" id="folder-id"><label for="folder-name">اسم المجلد:</label><input type="text" id="folder-name" required><label for="folder-description">وصف:</label><textarea id="folder-description" rows="3"></textarea><button type="submit" class="primary-btn">حفظ</button></form></div></div>
-    <div id="file-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3>إضافة عنصر</h3><form id="file-form"><label for="file-name">اسم العنصر:</label><input type="text" id="file-name" required><label for="file-type">النوع:</label><select id="file-type"><option value="note">ملاحظة</option><option value="image">صورة</option><option value="video">فيديو</option></select><div id="note-content-wrapper"><label for="note-content">المحتوى:</label><textarea id="note-content" rows="5"></textarea></div><div id="file-upload-wrapper" class="hidden"><label for="file-upload">اختر ملف:</label><input type="file" id="file-upload"></div><button type="submit" class="primary-btn">حفظ</button></form></div></div>
+    <!-- We will use data-translate-key attributes to identify elements for translation -->
+    <div id="auth-view" class="view"><div class="auth-container glassmorphism-card"><div id="login-form-container"><h2 data-translate-key="loginTitle">تسجيل الدخول</h2><form id="login-form"><input type="email" id="login-email" data-translate-placeholder="emailPlaceholder" placeholder="البريد الإلكتروني" required><input type="password" id="login-password" data-translate-placeholder="passwordPlaceholder" placeholder="كلمة المرور" required><button type="submit" class="primary-btn" data-translate-key="loginButton">دخول</button></form><p><span data-translate-key="noAccount">ليس لديك حساب؟</span> <a href="#" id="show-signup" data-translate-key="createAccountLink">أنشئ حسابًا</a></p></div><div id="signup-container" style="display: none;"><h2 data-translate-key="signupTitle">حساب جديد</h2><form id="signup-form"><input type="email" id="signup-email" data-translate-placeholder="emailPlaceholder" placeholder="البريد الإلكتروني" required><input type="password" id="signup-password" data-translate-placeholder="passwordPlaceholder" placeholder="كلمة المرور" required><button type="submit" class="primary-btn" data-translate-key="signupButton">تسجيل</button></form><p><span data-translate-key="haveAccount">لديك حساب؟</span> <a href="#" id="show-login" data-translate-key="loginLink">سجل الدخول</a></p></div></div></div>
+    <div id="main-view" class="view hidden"><header class="glassmorphism-header"><h1 data-translate-key="vaultTitle">الخزنة</h1><div class="header-controls"><div class="lang-switcher"><button id="lang-ar">عربي</button><button id="lang-en">English</button><button id="lang-he">עברית</button></div><input type="search" id="search-input" data-translate-placeholder="searchPlaceholder" placeholder="ابحث..."><button id="logout-button" class="secondary-btn" data-translate-key="logoutButton">تسجيل الخروج</button></div></header><main><div class="toolbar"><h2 data-translate-key="yourFolders">مجلداتك</h2><button id="add-folder-button" class="primary-btn"><i class="fas fa-plus"></i> <span data-translate-key="newFolderButton">مجلد جديد</span></button></div><div id="folders-list" class="grid-container"></div></main><nav class="bottom-nav"><button class="nav-item active" data-view="folders"><i class="fas fa-folder"></i><span data-translate-key="navFolders">المجلدات</span></button></nav></div>
+    <div id="folder-content-view" class="view hidden"><header class="glassmorphism-header"><button class="back-button"><i class="fas fa-arrow-right"></i></button><h1 id="current-folder-name"></h1></header><main><div class="toolbar"><h2 id="folder-content-title"></h2><button id="add-file-button" class="primary-btn"><i class="fas fa-plus"></i> <span data-translate-key="addItemButton">إضافة عنصر</span></button></div><div id="files-list" class="grid-container"></div></main></div>
+    <div id="media-viewer" class="view hidden"><header class="glassmorphism-header"><button class="back-button-media"><i class="fas fa-arrow-right"></i></button><h1 id="media-title"></h1></header><main class="media-container"><div id="image-viewer" class="hidden"><img id="image-display" src="" data-translate-alt="imageAlt" alt="صورة"></div><div id="video-viewer" class="hidden"><video id="video-display" controls></video></div><div id="text-viewer" class="hidden"><pre id="text-display"></pre></div></main></div>
+    <div id="folder-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3 id="modal-title"></h3><form id="folder-form"><input type="hidden" id="folder-id"><label for="folder-name" data-translate-key="folderNameLabel">اسم المجلد:</label><input type="text" id="folder-name" required><label for="folder-description" data-translate-key="descriptionLabel">وصف:</label><textarea id="folder-description" rows="3"></textarea><button type="submit" class="primary-btn" data-translate-key="saveButton">حفظ</button></form></div></div>
+    <div id="file-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3 data-translate-key="addItemTitle">إضافة عنصر</h3><form id="file-form"><label for="file-name" data-translate-key="itemNameLabel">اسم العنصر:</label><input type="text" id="file-name" required><label for="file-type" data-translate-key="typeLabel">النوع:</label><select id="file-type"><option value="note" data-translate-key="typeNote">ملاحظة</option><option value="image" data-translate-key="typeImage">صورة</option><option value="video" data-translate-key="typeVideo">فيديو</option></select><div id="note-content-wrapper"><label for="note-content" data-translate-key="contentLabel">المحتوى:</label><textarea id="note-content" rows="5"></textarea></div><div id="file-upload-wrapper" class="hidden"><label for="file-upload" data-translate-key="chooseFileLabel">اختر ملف:</label><input type="file" id="file-upload"></div><button type="submit" class="primary-btn" data-translate-key="saveButton">حفظ</button></form></div></div>
     <div id="loading-spinner" class="hidden"><div class="spinner"></div></div>
 
-    <!-- ======================= JAVASCRIPT LOGIC (CLEANED and CORRECTED) ======================= -->
+    <!-- ======================= JAVASCRIPT LOGIC (WITH LANGUAGE SWITCHER) ======================= -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+
+        // --- 0. LANGUAGE TRANSLATIONS & SWITCHER ---
+        const translations = {
+            ar: {
+                pageTitle: "الخزنة - الإصدار النهائي (مصحح)",
+                loginTitle: "تسجيل الدخول", emailPlaceholder: "البريد الإلكتروني", passwordPlaceholder: "كلمة المرور",
+                loginButton: "دخول", noAccount: "ليس لديك حساب؟", createAccountLink: "أنشئ حسابًا",
+                signupTitle: "حساب جديد", signupButton: "تسجيل", haveAccount: "لديك حساب؟", loginLink: "سجل الدخول",
+                vaultTitle: "الخزنة", searchPlaceholder: "ابحث...", logoutButton: "تسجيل الخروج",
+                yourFolders: "مجلداتك", newFolderButton: "مجلد جديد", navFolders: "المجلدات",
+                folderContents: "محتويات:", addItemButton: "إضافة عنصر", imageAlt: "صورة",
+                folderNameLabel: "اسم المجلد:", descriptionLabel: "وصف:", saveButton: "حفظ",
+                addItemTitle: "إضافة عنصر", itemNameLabel: "اسم العنصر:", typeLabel: "النوع:",
+                typeNote: "ملاحظة", typeImage: "صورة", typeVideo: "فيديو",
+                contentLabel: "المحتوى:", chooseFileLabel: "اختر ملف:",
+                noFolders: "لا يوجد مجلدات.", noDescription: "لا يوجد وصف", edit: "تعديل", delete: "حذف",
+                emptyFolder: "هذا المجلد فارغ.", fileType: "ملف",
+                newFolderModalTitle: "مجلد جديد", editFolderModalTitle: "تعديل المجلد",
+                alertConfirmEmail: "تم إرسال رابط تأكيد إلى بريدك الإلكتروني!",
+                alertLinkError: "خطأ في إنشاء رابط العرض: ",
+                alertChooseFile: "الرجاء اختيار ملف للرفع.",
+                alertUploadError: "خطأ في رفع الملف: ",
+                alertSaveError: "خطأ في حفظ البيانات: ",
+                confirmDeleteFolder: "هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟",
+                confirmDeleteItem: "هل أنت متأكد من حذف هذا العنصر؟"
+            },
+            en: {
+                pageTitle: "The Vault - Final Version (Corrected)",
+                loginTitle: "Login", emailPlaceholder: "Email", passwordPlaceholder: "Password",
+                loginButton: "Login", noAccount: "Don't have an account?", createAccountLink: "Create one",
+                signupTitle: "New Account", signupButton: "Sign Up", haveAccount: "Have an account?", loginLink: "Log in",
+                vaultTitle: "The Vault", searchPlaceholder: "Search...", logoutButton: "Logout",
+                yourFolders: "Your Folders", newFolderButton: "New Folder", navFolders: "Folders",
+                folderContents: "Contents:", addItemButton: "Add Item", imageAlt: "Image",
+                folderNameLabel: "Folder Name:", descriptionLabel: "Description:", saveButton: "Save",
+                addItemTitle: "Add Item", itemNameLabel: "Item Name:", typeLabel: "Type:",
+                typeNote: "Note", typeImage: "Image", typeVideo: "Video",
+                contentLabel: "Content:", chooseFileLabel: "Choose file:",
+                noFolders: "No folders found.", noDescription: "No description", edit: "Edit", delete: "Delete",
+                emptyFolder: "This folder is empty.", fileType: "file",
+                newFolderModalTitle: "New Folder", editFolderModalTitle: "Edit Folder",
+                alertConfirmEmail: "A confirmation link has been sent to your email!",
+                alertLinkError: "Error creating view link: ",
+                alertChooseFile: "Please choose a file to upload.",
+                alertUploadError: "Error uploading file: ",
+                alertSaveError: "Error saving data: ",
+                confirmDeleteFolder: "Are you sure you want to delete this folder and all its contents?",
+                confirmDeleteItem: "Are you sure you want to delete this item?"
+            },
+            he: {
+                pageTitle: "הכספת - גרסה סופית (מתוקן)",
+                loginTitle: "כניסה", emailPlaceholder: "אימייל", passwordPlaceholder: "סיסמה",
+                loginButton: "כניסה", noAccount: "אין לך חשבון?", createAccountLink: "צור חשבון",
+                signupTitle: "חשבון חדש", signupButton: "הרשמה", haveAccount: "יש לך חשבון?", loginLink: "התחבר",
+                vaultTitle: "הכספת", searchPlaceholder: "חפש...", logoutButton: "התנתק",
+                yourFolders: "התיקיות שלך", newFolderButton: "תיקיה חדשה", navFolders: "תיקיות",
+                folderContents: "תוכן:", addItemButton: "הוסף פריט", imageAlt: "תמונה",
+                folderNameLabel: "שם התיקיה:", descriptionLabel: "תיאור:", saveButton: "שמור",
+                addItemTitle: "הוסף פריט", itemNameLabel: "שם הפריט:", typeLabel: "סוג:",
+                typeNote: "הערה", typeImage: "תמונה", typeVideo: "וידאו",
+                contentLabel: "תוכן:", chooseFileLabel: "בחר קובץ:",
+                noFolders: "אין תיקיות.", noDescription: "אין תיאור", edit: "ערוך", delete: "מחק",
+                emptyFolder: "התיקיה הזו ריקה.", fileType: "קובץ",
+                newFolderModalTitle: "תיקיה חדשה", editFolderModalTitle: "ערוך תיקיה",
+                alertConfirmEmail: "קישור אישור נשלח לאימייל שלך!",
+                alertLinkError: "שגיאה ביצירת קישור לצפייה: ",
+                alertChooseFile: "אנא בחר קובץ להעלאה.",
+                alertUploadError: "שגיאה בהעלאת הקובץ: ",
+                alertSaveError: "שגיאה בשמירת הנתונים: ",
+                confirmDeleteFolder: "האם אתה בטוח שברצונך למחוק את התיקיה הזו וכל תכניה?",
+                confirmDeleteItem: "האם אתה בטוח שברצונך למחוק את הפריט הזה?"
+            }
+        };
+
+        let currentLang = localStorage.getItem('language') || 'ar';
+
+        const setLanguage = (lang) => {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            const langData = translations[lang];
+            const isRTL = lang === 'ar' || lang === 'he';
+
+            document.documentElement.lang = lang;
+            document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (langData[key]) el.innerText = langData[key];
+            });
+
+            document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-translate-placeholder');
+                if (langData[key]) el.placeholder = langData[key];
+            });
+            
+             document.querySelectorAll('[data-translate-alt]').forEach(el => {
+                const key = el.getAttribute('data-translate-alt');
+                if (langData[key]) el.alt = langData[key];
+            });
+
+            document.title = langData.pageTitle;
+
+            // Update active button style
+            document.querySelectorAll('.lang-switcher button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`lang-${lang}`).classList.add('active');
+
+            // Force re-render if views are active
+            if (currentUser) {
+                fetchFolders(searchInput.value);
+                if (currentFolderId) {
+                   fetchFiles(currentFolderId);
+                }
+            }
+        };
+
+        const translate = (key) => {
+            return translations[currentLang][key] || key;
+        };
+        
+        document.getElementById('lang-ar').addEventListener('click', () => setLanguage('ar'));
+        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('lang-he').addEventListener('click', () => setLanguage('he'));
+
 
         // --- 1. SETUP ---
         const SUPABASE_URL = 'https://inexkigotfyhsprhbqyn.supabase.co';
@@ -200,13 +347,13 @@
 
         const renderFolders = (folders) => {
             foldersList.innerHTML = '';
-            if (!folders || folders.length === 0) { foldersList.innerHTML = '<p>لا يوجد مجلدات.</p>'; return; }
+            if (!folders || folders.length === 0) { foldersList.innerHTML = `<p>${translate('noFolders')}</p>`; return; }
             folders.forEach(folder => {
                 const folderEl = document.createElement('div');
                 folderEl.className = 'card';
                 folderEl.dataset.id = folder.id;
                 folderEl.dataset.name = folder.name;
-                folderEl.innerHTML = `<h4><i class="fas fa-folder" style="color: #4A90E2;"></i> ${folder.name}</h4><p>${folder.description || 'لا يوجد وصف'}</p><div class="card-footer"><span>${new Date(folder.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="edit-folder" title="تعديل"><i class="fas fa-pen"></i></button><button class="delete-folder" title="حذف"><i class="fas fa-trash"></i></button></div></div>`;
+                folderEl.innerHTML = `<h4><i class="fas fa-folder" style="color: #4A90E2;"></i> ${folder.name}</h4><p>${folder.description || translate('noDescription')}</p><div class="card-footer"><span>${new Date(folder.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="edit-folder" title="${translate('edit')}"><i class="fas fa-pen"></i></button><button class="delete-folder" title="${translate('delete')}"><i class="fas fa-trash"></i></button></div></div>`;
                 folderEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openFolder(folder.id, folder.name); });
                 foldersList.appendChild(folderEl);
             });
@@ -216,7 +363,7 @@
             currentFolderId = folderId;
             showView('folderContent');
             currentFolderName.textContent = folderName;
-            document.getElementById('folder-content-title').textContent = `محتويات: ${folderName}`;
+            document.getElementById('folder-content-title').textContent = `${translate('folderContents')} ${folderName}`;
             fetchFiles(folderId);
         };
         
@@ -232,13 +379,13 @@
 
         const renderFiles = (files) => {
             filesList.innerHTML = '';
-            if (!files || files.length === 0) { filesList.innerHTML = '<p>هذا المجلد فارغ.</p>'; return; }
+            if (!files || files.length === 0) { filesList.innerHTML = `<p>${translate('emptyFolder')}</p>`; return; }
             files.forEach(file => {
                 const icon = file.type === 'note' ? 'fa-sticky-note' : (file.type === 'image' ? 'fa-image' : 'fa-video');
                 const fileEl = document.createElement('div');
                 fileEl.className = 'card';
                 fileEl.dataset.id = file.id;
-                fileEl.innerHTML = `<h4><i class="fas ${icon}"></i> ${file.name}</h4><p>${file.type === 'note' ? ((file.content || '').substring(0, 50) + '...') : `ملف ${file.type}`}</p><div class="card-footer"><span>${new Date(file.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="delete-file"><i class="fas fa-trash"></i></button></div></div>`;
+                fileEl.innerHTML = `<h4><i class="fas ${icon}"></i> ${file.name}</h4><p>${file.type === 'note' ? ((file.content || '').substring(0, 50) + '...') : `${translate('fileType')} ${file.type}`}</p><div class="card-footer"><span>${new Date(file.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="delete-file" title="${translate('delete')}"><i class="fas fa-trash"></i></button></div></div>`;
                 fileEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openMediaViewer(file.id); });
                 filesList.appendChild(fileEl);
             });
@@ -258,7 +405,7 @@
                 showLoading();
                 const { data, error } = await supabaseClient.storage.from('uploads').createSignedUrl(file.file_path, 3600);
                 hideLoading();
-                if (error) { alert('خطأ في إنشاء رابط العرض: ' + error.message); return; }
+                if (error) { alert(translate('alertLinkError') + error.message); return; }
                 if (data && data.signedUrl) {
                     if (file.type === 'image') { imageDisplay.src = data.signedUrl; imageViewer.classList.remove('hidden'); } 
                     else { videoDisplay.src = data.signedUrl; videoViewer.classList.remove('hidden'); }
@@ -273,27 +420,28 @@
 
         // Auth
         loginForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); hideLoading(); if (error) alert(error.message); else await checkUser(); });
-        signupForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('signup-email').value; const password = document.getElementById('signup-password').value; const { error } = await supabaseClient.auth.signUp({ email, password }); hideLoading(); if (error) alert(error.message); else alert('تم إرسال رابط تأكيد إلى بريدك الإلكتروني!'); });
+        signupForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('signup-email').value; const password = document.getElementById('signup-password').value; const { error } = await supabaseClient.auth.signUp({ email, password }); hideLoading(); if (error) alert(error.message); else alert(translate('alertConfirmEmail')); });
         logoutButtons.forEach(btn => btn.addEventListener('click', async () => { showLoading(); await supabaseClient.auth.signOut(); hideLoading(); await checkUser(); }));
         showSignupLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'block'; loginForm.parentElement.style.display = 'none'; });
         showLoginLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'none'; loginForm.parentElement.style.display = 'block'; });
         
         // Folders
-        addFolderButton.addEventListener('click', () => { folderForm.reset(); folderIdInput.value = ''; modalTitle.textContent = 'مجلد جديد'; folderModal.classList.remove('hidden'); });
+        addFolderButton.addEventListener('click', () => { folderForm.reset(); folderIdInput.value = ''; modalTitle.textContent = translate('newFolderModalTitle'); folderModal.classList.remove('hidden'); });
         folderForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const folderData = { name: folderNameInput.value, description: folderDescriptionInput.value, user_id: currentUser.id }; const { error } = folderIdInput.value ? await supabaseClient.from('folders').update(folderData).eq('id', folderIdInput.value) : await supabaseClient.from('folders').insert(folderData); hideLoading(); if (error) alert(error.message); else { folderModal.classList.add('hidden'); await fetchFolders(); } });
-        foldersList.addEventListener('click', async (e) => { const button = e.target.closest('button'); if (!button) return; const card = button.closest('.card'); const id = card.dataset.id; if (button.classList.contains('edit-folder')) { const { data: folder } = await supabaseClient.from('folders').select('*').eq('id', id).single(); if (folder) { folderIdInput.value = folder.id; folderNameInput.value = folder.name; folderDescriptionInput.value = folder.description; modalTitle.textContent = 'تعديل المجلد'; folderModal.classList.remove('hidden'); } } if (button.classList.contains('delete-folder')) { if (confirm('هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟')) { showLoading(); await supabaseClient.from('files').delete().eq('folder_id', id); await supabaseClient.from('folders').delete().eq('id', id); hideLoading(); await fetchFolders(); } } });
+        foldersList.addEventListener('click', async (e) => { const button = e.target.closest('button'); if (!button) return; const card = button.closest('.card'); const id = card.dataset.id; if (button.classList.contains('edit-folder')) { const { data: folder } = await supabaseClient.from('folders').select('*').eq('id', id).single(); if (folder) { folderIdInput.value = folder.id; folderNameInput.value = folder.name; folderDescriptionInput.value = folder.description; modalTitle.textContent = translate('editFolderModalTitle'); folderModal.classList.remove('hidden'); } } if (button.classList.contains('delete-folder')) { if (confirm(translate('confirmDeleteFolder'))) { showLoading(); await supabaseClient.from('files').delete().eq('folder_id', id); await supabaseClient.from('folders').delete().eq('id', id); hideLoading(); await fetchFolders(); } } });
         
         // Files
         addFileButton.addEventListener('click', () => { fileForm.reset(); fileModal.classList.remove('hidden'); noteContentWrapper.classList.remove('hidden'); fileUploadWrapper.classList.add('hidden'); });
         fileTypeSelect.addEventListener('change', () => { const isNote = fileTypeSelect.value === 'note'; noteContentWrapper.classList.toggle('hidden', !isNote); fileUploadWrapper.classList.toggle('hidden', isNote); });
-        fileForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const fileData = { name: fileNameInput.value, type: fileTypeSelect.value, folder_id: currentFolderId, user_id: currentUser.id }; if (fileData.type !== 'note') { const file = fileUploadInput.files[0]; if (!file) { alert('الرجاء اختيار ملف للرفع.'); hideLoading(); return; } const filePath = `${currentUser.id}/${currentFolderId}/${Date.now()}-${file.name}`; const { error } = await supabaseClient.storage.from('uploads').upload(filePath, file); if (error) { alert('خطأ في رفع الملف: ' + error.message); hideLoading(); return; } fileData.file_path = filePath; } else { fileData.content = noteContentInput.value; } const { error: insertError } = await supabaseClient.from('files').insert(fileData); hideLoading(); if (insertError) alert('خطأ في حفظ البيانات: ' + insertError.message); else { fileModal.classList.add('hidden'); await fetchFiles(currentFolderId); } });
-        filesList.addEventListener('click', async (e) => { const button = e.target.closest('.delete-file'); if (!button) return; const card = button.closest('.card'); const file = filesCache.find(f => f.id === card.dataset.id); if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) { showLoading(); if (file.file_path) { await supabaseClient.storage.from('uploads').remove([file.file_path]); } await supabaseClient.from('files').delete().eq('id', file.id); hideLoading(); await fetchFiles(currentFolderId); } });
+        fileForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const fileData = { name: fileNameInput.value, type: fileTypeSelect.value, folder_id: currentFolderId, user_id: currentUser.id }; if (fileData.type !== 'note') { const file = fileUploadInput.files[0]; if (!file) { alert(translate('alertChooseFile')); hideLoading(); return; } const filePath = `${currentUser.id}/${currentFolderId}/${Date.now()}-${file.name}`; const { error } = await supabaseClient.storage.from('uploads').upload(filePath, file); if (error) { alert(translate('alertUploadError') + error.message); hideLoading(); return; } fileData.file_path = filePath; } else { fileData.content = noteContentInput.value; } const { error: insertError } = await supabaseClient.from('files').insert(fileData); hideLoading(); if (insertError) alert(translate('alertSaveError') + insertError.message); else { fileModal.classList.add('hidden'); await fetchFiles(currentFolderId); } });
+        filesList.addEventListener('click', async (e) => { const button = e.target.closest('.delete-file'); if (!button) return; const card = button.closest('.card'); const file = filesCache.find(f => f.id === card.dataset.id); if (confirm(translate('confirmDeleteItem'))) { showLoading(); if (file.file_path) { await supabaseClient.storage.from('uploads').remove([file.file_path]); } await supabaseClient.from('files').delete().eq('id', file.id); hideLoading(); await fetchFiles(currentFolderId); } });
         
         // General
         searchInput.addEventListener('input', (e) => fetchFolders(e.target.value));
         closeButtons.forEach(btn => { btn.addEventListener('click', () => { folderModal.classList.add('hidden'); fileModal.classList.add('hidden'); }); });
         
         // --- 6. INITIALIZATION ---
+        setLanguage(currentLang); // Apply the initial language
         setupNavigation();
         checkUser();
 
