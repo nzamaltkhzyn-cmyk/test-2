@@ -107,196 +107,200 @@
     <!-- ======================= JAVASCRIPT LOGIC (CLEANED and CORRECTED) ======================= -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- 1. SETUP ---
-        // التعديل الثاني: استخدام المتغيرات من ملف config.js بدلاً من كتابتها هنا مباشرة
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // --- 1. SETUP ---
+    // 🔽🔽🔽 هذا هو الجزء الوحيد الذي تم تعديله 🔽🔽🔽
+    // تم حذف تعريف المفاتيح من هنا.
+    // الآن، الكود يستخدم متغيرات SUPABASE_URL و SUPABASE_ANON_KEY
+    // التي تم تحميلها من ملف config.js الذي استدعيته في ملف HTML.
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // 🔼🔼🔼 نهاية الجزء المعدل 🔼🔼🔼
 
-        // --- 2. DOM ELEMENTS ---
-        const views = { auth: document.getElementById('auth-view'), main: document.getElementById('main-view'), folderContent: document.getElementById('folder-content-view'), mediaViewer: document.getElementById('media-viewer') };
-        const loginForm = document.getElementById('login-form');
-        const signupForm = document.getElementById('signup-form');
-        const showSignupLink = document.getElementById('show-signup');
-        const showLoginLink = document.getElementById('show-login');
-        const signupContainer = document.getElementById('signup-container');
-        const logoutButtons = document.querySelectorAll('#logout-button');
-        const foldersList = document.getElementById('folders-list');
-        const addFolderButton = document.getElementById('add-folder-button');
-        const folderModal = document.getElementById('folder-modal');
-        const folderForm = document.getElementById('folder-form');
-        const folderIdInput = document.getElementById('folder-id');
-        const folderNameInput = document.getElementById('folder-name');
-        const folderDescriptionInput = document.getElementById('folder-description');
-        const modalTitle = document.getElementById('modal-title');
-        const currentFolderName = document.getElementById('current-folder-name');
-        const filesList = document.getElementById('files-list');
-        const addFileButton = document.getElementById('add-file-button');
-        const fileModal = document.getElementById('file-modal');
-        const fileForm = document.getElementById('file-form');
-        const fileNameInput = document.getElementById('file-name');
-        const fileTypeSelect = document.getElementById('file-type');
-        const noteContentWrapper = document.getElementById('note-content-wrapper');
-        const noteContentInput = document.getElementById('note-content');
-        const fileUploadWrapper = document.getElementById('file-upload-wrapper');
-        const fileUploadInput = document.getElementById('file-upload');
-        const searchInput = document.getElementById('search-input');
-        const loadingSpinner = document.getElementById('loading-spinner');
-        const closeButtons = document.querySelectorAll('.close-button');
-        const mediaTitle = document.getElementById('media-title');
-        const imageViewer = document.getElementById('image-viewer');
-        const videoViewer = document.getElementById('video-viewer');
-        const textViewer = document.getElementById('text-viewer');
-        const imageDisplay = document.getElementById('image-display');
-        const videoDisplay = document.getElementById('video-display');
-        const textDisplay = document.getElementById('text-display');
+    // --- 2. DOM ELEMENTS ---
+    const views = { auth: document.getElementById('auth-view'), main: document.getElementById('main-view'), folderContent: document.getElementById('folder-content-view'), mediaViewer: document.getElementById('media-viewer') };
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const showSignupLink = document.getElementById('show-signup');
+    const showLoginLink = document.getElementById('show-login');
+    const signupContainer = document.getElementById('signup-container');
+    const logoutButtons = document.querySelectorAll('#logout-button');
+    const foldersList = document.getElementById('folders-list');
+    const addFolderButton = document.getElementById('add-folder-button');
+    const folderModal = document.getElementById('folder-modal');
+    const folderForm = document.getElementById('folder-form');
+    const folderIdInput = document.getElementById('folder-id');
+    const folderNameInput = document.getElementById('folder-name');
+    const folderDescriptionInput = document.getElementById('folder-description');
+    const modalTitle = document.getElementById('modal-title');
+    const currentFolderName = document.getElementById('current-folder-name');
+    const filesList = document.getElementById('files-list');
+    const addFileButton = document.getElementById('add-file-button');
+    const fileModal = document.getElementById('file-modal');
+    const fileForm = document.getElementById('file-form');
+    const fileNameInput = document.getElementById('file-name');
+    const fileTypeSelect = document.getElementById('file-type');
+    const noteContentWrapper = document.getElementById('note-content-wrapper');
+    const noteContentInput = document.getElementById('note-content');
+    const fileUploadWrapper = document.getElementById('file-upload-wrapper');
+    const fileUploadInput = document.getElementById('file-upload');
+    const searchInput = document.getElementById('search-input');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const closeButtons = document.querySelectorAll('.close-button');
+    const mediaTitle = document.getElementById('media-title');
+    const imageViewer = document.getElementById('image-viewer');
+    const videoViewer = document.getElementById('video-viewer');
+    const textViewer = document.getElementById('text-viewer');
+    const imageDisplay = document.getElementById('image-display');
+    const videoDisplay = document.getElementById('video-display');
+    const textDisplay = document.getElementById('text-display');
 
-        // --- 3. APP STATE ---
-        let currentUser = null;
-        let currentFolderId = null;
-        let filesCache = [];
+    // --- 3. APP STATE ---
+    let currentUser = null;
+    let currentFolderId = null;
+    let filesCache = [];
 
-        // --- 4. FUNCTIONS ---
+    // --- 4. FUNCTIONS ---
 
-        // Utility
-        const showView = (viewName) => { Object.values(views).forEach(v => v.classList.add('hidden')); if(views[viewName]) views[viewName].classList.remove('hidden'); };
-        const showLoading = () => loadingSpinner.classList.remove('hidden');
-        const hideLoading = () => loadingSpinner.classList.add('hidden');
+    // Utility
+    const showView = (viewName) => { Object.values(views).forEach(v => v.classList.add('hidden')); if(views[viewName]) views[viewName].classList.remove('hidden'); };
+    const showLoading = () => loadingSpinner.classList.remove('hidden');
+    const hideLoading = () => loadingSpinner.classList.add('hidden');
 
-        // Navigation
-        const setupNavigation = () => {
-            document.querySelectorAll('.back-button').forEach(btn => btn.addEventListener('click', () => showView('main')));
-            document.querySelector('.back-button-media').addEventListener('click', () => {
-                videoDisplay.pause();
-                videoDisplay.src = '';
-                showView('folderContent');
-            });
-        };
-        
-        // Authentication
-        const checkUser = async () => {
-            showLoading();
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            hideLoading();
-            if (session) {
-                currentUser = session.user;
-                showView('main');
-                await fetchFolders();
-            } else {
-                currentUser = null;
-                showView('auth');
-            }
-        };
-
-        // Folder Management
-        const fetchFolders = async (searchTerm = '') => {
-            showLoading();
-            let query = supabaseClient.from('folders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-            if (searchTerm) query = query.ilike('name', `%${searchTerm}%`);
-            const { data: folders, error } = await query;
-            hideLoading();
-            if (error) console.error('Error fetching folders:', error); else renderFolders(folders);
-        };
-
-        const renderFolders = (folders) => {
-            foldersList.innerHTML = '';
-            if (!folders || folders.length === 0) { foldersList.innerHTML = '<p>لا يوجد مجلدات.</p>'; return; }
-            folders.forEach(folder => {
-                const folderEl = document.createElement('div');
-                folderEl.className = 'card';
-                folderEl.dataset.id = folder.id;
-                folderEl.dataset.name = folder.name;
-                folderEl.innerHTML = `<h4><i class="fas fa-folder" style="color: #4A90E2;"></i> ${folder.name}</h4><p>${folder.description || 'لا يوجد وصف'}</p><div class="card-footer"><span>${new Date(folder.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="edit-folder" title="تعديل"><i class="fas fa-pen"></i></button><button class="delete-folder" title="حذف"><i class="fas fa-trash"></i></button></div></div>`;
-                folderEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openFolder(folder.id, folder.name); });
-                foldersList.appendChild(folderEl);
-            });
-        };
-
-        const openFolder = (folderId, folderName) => {
-            currentFolderId = folderId;
+    // Navigation
+    const setupNavigation = () => {
+        document.querySelectorAll('.back-button').forEach(btn => btn.addEventListener('click', () => showView('main')));
+        document.querySelector('.back-button-media').addEventListener('click', () => {
+            videoDisplay.pause();
+            videoDisplay.src = '';
             showView('folderContent');
-            currentFolderName.textContent = folderName;
-            document.getElementById('folder-content-title').textContent = `محتويات: ${folderName}`;
-            fetchFiles(folderId);
-        };
-        
-        // File Management
-        const fetchFiles = async (folderId) => {
+        });
+    };
+    
+    // Authentication
+    const checkUser = async () => {
+        showLoading();
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        hideLoading();
+        if (session) {
+            currentUser = session.user;
+            showView('main');
+            await fetchFolders();
+        } else {
+            currentUser = null;
+            showView('auth');
+        }
+    };
+
+    // Folder Management
+    const fetchFolders = async (searchTerm = '') => {
+        showLoading();
+        let query = supabaseClient.from('folders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+        if (searchTerm) query = query.ilike('name', `%${searchTerm}%`);
+        const { data: folders, error } = await query;
+        hideLoading();
+        if (error) console.error('Error fetching folders:', error); else renderFolders(folders);
+    };
+
+    const renderFolders = (folders) => {
+        foldersList.innerHTML = '';
+        if (!folders || folders.length === 0) { foldersList.innerHTML = '<p>لا يوجد مجلدات.</p>'; return; }
+        folders.forEach(folder => {
+            const folderEl = document.createElement('div');
+            folderEl.className = 'card';
+            folderEl.dataset.id = folder.id;
+            folderEl.dataset.name = folder.name;
+            folderEl.innerHTML = `<h4><i class="fas fa-folder" style="color: #4A90E2;"></i> ${folder.name}</h4><p>${folder.description || 'لا يوجد وصف'}</p><div class="card-footer"><span>${new Date(folder.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="edit-folder" title="تعديل"><i class="fas fa-pen"></i></button><button class="delete-folder" title="حذف"><i class="fas fa-trash"></i></button></div></div>`;
+            folderEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openFolder(folder.id, folder.name); });
+            foldersList.appendChild(folderEl);
+        });
+    };
+
+    const openFolder = (folderId, folderName) => {
+        currentFolderId = folderId;
+        showView('folderContent');
+        currentFolderName.textContent = folderName;
+        document.getElementById('folder-content-title').textContent = `محتويات: ${folderName}`;
+        fetchFiles(folderId);
+    };
+    
+    // File Management
+    const fetchFiles = async (folderId) => {
+        showLoading();
+        const { data: files, error } = await supabaseClient.from('files').select('*').eq('folder_id', folderId).order('created_at', { ascending: false });
+        hideLoading();
+        if (error) { console.error('Error fetching files:', error); return; }
+        filesCache = files;
+        renderFiles(files);
+    };
+
+    const renderFiles = (files) => {
+        filesList.innerHTML = '';
+        if (!files || files.length === 0) { filesList.innerHTML = '<p>هذا المجلد فارغ.</p>'; return; }
+        files.forEach(file => {
+            const icon = file.type === 'note' ? 'fa-sticky-note' : (file.type === 'image' ? 'fa-image' : 'fa-video');
+            const fileEl = document.createElement('div');
+            fileEl.className = 'card';
+            fileEl.dataset.id = file.id;
+            fileEl.innerHTML = `<h4><i class="fas ${icon}"></i> ${file.name}</h4><p>${file.type === 'note' ? ((file.content || '').substring(0, 50) + '...') : `ملف ${file.type}`}</p><div class="card-footer"><span>${new Date(file.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="delete-file"><i class="fas fa-trash"></i></button></div></div>`;
+            fileEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openMediaViewer(file.id); });
+            filesList.appendChild(fileEl);
+        });
+    };
+    
+    const openMediaViewer = async (fileId) => {
+        const file = filesCache.find(f => f.id === fileId);
+        if (!file) return;
+
+        mediaTitle.textContent = file.name;
+        imageViewer.classList.add('hidden');
+        videoViewer.classList.add('hidden');
+        textViewer.classList.add('hidden');
+        showView('mediaViewer');
+
+        if (file.type === 'image' || file.type === 'video') {
             showLoading();
-            const { data: files, error } = await supabaseClient.from('files').select('*').eq('folder_id', folderId).order('created_at', { ascending: false });
+            const { data, error } = await supabaseClient.storage.from('uploads').createSignedUrl(file.file_path, 3600);
             hideLoading();
-            if (error) { console.error('Error fetching files:', error); return; }
-            filesCache = files;
-            renderFiles(files);
-        };
-
-        const renderFiles = (files) => {
-            filesList.innerHTML = '';
-            if (!files || files.length === 0) { filesList.innerHTML = '<p>هذا المجلد فارغ.</p>'; return; }
-            files.forEach(file => {
-                const icon = file.type === 'note' ? 'fa-sticky-note' : (file.type === 'image' ? 'fa-image' : 'fa-video');
-                const fileEl = document.createElement('div');
-                fileEl.className = 'card';
-                fileEl.dataset.id = file.id;
-                fileEl.innerHTML = `<h4><i class="fas ${icon}"></i> ${file.name}</h4><p>${file.type === 'note' ? ((file.content || '').substring(0, 50) + '...') : `ملف ${file.type}`}</p><div class="card-footer"><span>${new Date(file.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="delete-file"><i class="fas fa-trash"></i></button></div></div>`;
-                fileEl.addEventListener('click', (e) => { if (e.target.closest('.card-actions')) return; openMediaViewer(file.id); });
-                filesList.appendChild(fileEl);
-            });
-        };
-        
-        const openMediaViewer = async (fileId) => {
-            const file = filesCache.find(f => f.id === fileId);
-            if (!file) return;
-
-            mediaTitle.textContent = file.name;
-            imageViewer.classList.add('hidden');
-            videoViewer.classList.add('hidden');
-            textViewer.classList.add('hidden');
-            showView('mediaViewer');
-
-            if (file.type === 'image' || file.type === 'video') {
-                showLoading();
-                const { data, error } = await supabaseClient.storage.from('uploads').createSignedUrl(file.file_path, 3600);
-                hideLoading();
-                if (error) { alert('خطأ في إنشاء رابط العرض: ' + error.message); return; }
-                if (data && data.signedUrl) {
-                    if (file.type === 'image') { imageDisplay.src = data.signedUrl; imageViewer.classList.remove('hidden'); } 
-                    else { videoDisplay.src = data.signedUrl; videoViewer.classList.remove('hidden'); }
-                }
-            } else if (file.type === 'note') {
-                textDisplay.textContent = file.content;
-                textViewer.classList.remove('hidden');
+            if (error) { alert('خطأ في إنشاء رابط العرض: ' + error.message); return; }
+            if (data && data.signedUrl) {
+                if (file.type === 'image') { imageDisplay.src = data.signedUrl; imageViewer.classList.remove('hidden'); } 
+                else { videoDisplay.src = data.signedUrl; videoViewer.classList.remove('hidden'); }
             }
-        };
+        } else if (file.type === 'note') {
+            textDisplay.textContent = file.content;
+            textViewer.classList.remove('hidden');
+        }
+    };
 
-        // --- 5. EVENT LISTENERS ---
+    // --- 5. EVENT LISTENERS ---
 
-        // Auth
-        loginForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); hideLoading(); if (error) alert(error.message); else await checkUser(); });
-        signupForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('signup-email').value; const password = document.getElementById('signup-password').value; const { error } = await supabaseClient.auth.signUp({ email, password }); hideLoading(); if (error) alert(error.message); else alert('تم إرسال رابط تأكيد إلى بريدك الإلكتروني!'); });
-        logoutButtons.forEach(btn => btn.addEventListener('click', async () => { showLoading(); await supabaseClient.auth.signOut(); hideLoading(); await checkUser(); }));
-        showSignupLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'block'; loginForm.parentElement.style.display = 'none'; });
-        showLoginLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'none'; loginForm.parentElement.style.display = 'block'; });
-        
-        // Folders
-        addFolderButton.addEventListener('click', () => { folderForm.reset(); folderIdInput.value = ''; modalTitle.textContent = 'مجلد جديد'; folderModal.classList.remove('hidden'); });
-        folderForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const folderData = { name: folderNameInput.value, description: folderDescriptionInput.value, user_id: currentUser.id }; const { error } = folderIdInput.value ? await supabaseClient.from('folders').update(folderData).eq('id', folderIdInput.value) : await supabaseClient.from('folders').insert(folderData); hideLoading(); if (error) alert(error.message); else { folderModal.classList.add('hidden'); await fetchFolders(); } });
-        foldersList.addEventListener('click', async (e) => { const button = e.target.closest('button'); if (!button) return; const card = button.closest('.card'); const id = card.dataset.id; if (button.classList.contains('edit-folder')) { const { data: folder } = await supabaseClient.from('folders').select('*').eq('id', id).single(); if (folder) { folderIdInput.value = folder.id; folderNameInput.value = folder.name; folderDescriptionInput.value = folder.description; modalTitle.textContent = 'تعديل المجلد'; folderModal.classList.remove('hidden'); } } if (button.classList.contains('delete-folder')) { if (confirm('هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟')) { showLoading(); await supabaseClient.from('files').delete().eq('folder_id', id); await supabaseClient.from('folders').delete().eq('id', id); hideLoading(); await fetchFolders(); } } });
-        
-        // Files
-        addFileButton.addEventListener('click', () => { fileForm.reset(); fileModal.classList.remove('hidden'); noteContentWrapper.classList.remove('hidden'); fileUploadWrapper.classList.add('hidden'); });
-        fileTypeSelect.addEventListener('change', () => { const isNote = fileTypeSelect.value === 'note'; noteContentWrapper.classList.toggle('hidden', !isNote); fileUploadWrapper.classList.toggle('hidden', isNote); });
-        fileForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const fileData = { name: fileNameInput.value, type: fileTypeSelect.value, folder_id: currentFolderId, user_id: currentUser.id }; if (fileData.type !== 'note') { const file = fileUploadInput.files[0]; if (!file) { alert('الرجاء اختيار ملف للرفع.'); hideLoading(); return; } const filePath = `${currentUser.id}/${currentFolderId}/${Date.now()}-${file.name}`; const { error } = await supabaseClient.storage.from('uploads').upload(filePath, file); if (error) { alert('خطأ في رفع الملف: ' + error.message); hideLoading(); return; } fileData.file_path = filePath; } else { fileData.content = noteContentInput.value; } const { error: insertError } = await supabaseClient.from('files').insert(fileData); hideLoading(); if (insertError) alert('خطأ في حفظ البيانات: ' + insertError.message); else { fileModal.classList.add('hidden'); await fetchFiles(currentFolderId); } });
-        filesList.addEventListener('click', async (e) => { const button = e.target.closest('.delete-file'); if (!button) return; const card = button.closest('.card'); const file = filesCache.find(f => f.id === card.dataset.id); if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) { showLoading(); if (file.file_path) { await supabaseClient.storage.from('uploads').remove([file.file_path]); } await supabaseClient.from('files').delete().eq('id', file.id); hideLoading(); await fetchFiles(currentFolderId); } });
-        
-        // General
-        searchInput.addEventListener('input', (e) => fetchFolders(e.target.value));
-        closeButtons.forEach(btn => { btn.addEventListener('click', () => { folderModal.classList.add('hidden'); fileModal.classList.add('hidden'); }); });
-        
-        // --- 6. INITIALIZATION ---
-        setupNavigation();
-        checkUser();
+    // Auth
+    loginForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('login-email').value; const password = document.getElementById('login-password').value; const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); hideLoading(); if (error) alert(error.message); else await checkUser(); });
+    signupForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = document.getElementById('signup-email').value; const password = document.getElementById('signup-password').value; const { error } = await supabaseClient.auth.signUp({ email, password }); hideLoading(); if (error) alert(error.message); else alert('تم إرسال رابط تأكيد إلى بريدك الإلكتروني!'); });
+    logoutButtons.forEach(btn => btn.addEventListener('click', async () => { showLoading(); await supabaseClient.auth.signOut(); hideLoading(); await checkUser(); }));
+    showSignupLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'block'; loginForm.parentElement.style.display = 'none'; });
+    showLoginLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'none'; loginForm.parentElement.style.display = 'block'; });
+    
+    // Folders
+    addFolderButton.addEventListener('click', () => { folderForm.reset(); folderIdInput.value = ''; modalTitle.textContent = 'مجلد جديد'; folderModal.classList.remove('hidden'); });
+    folderForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const folderData = { name: folderNameInput.value, description: folderDescriptionInput.value, user_id: currentUser.id }; const { error } = folderIdInput.value ? await supabaseClient.from('folders').update(folderData).eq('id', folderIdInput.value) : await supabaseClient.from('folders').insert(folderData); hideLoading(); if (error) alert(error.message); else { folderModal.classList.add('hidden'); await fetchFolders(); } });
+    foldersList.addEventListener('click', async (e) => { const button = e.target.closest('button'); if (!button) return; const card = button.closest('.card'); const id = card.dataset.id; if (button.classList.contains('edit-folder')) { const { data: folder } = await supabaseClient.from('folders').select('*').eq('id', id).single(); if (folder) { folderIdInput.value = folder.id; folderNameInput.value = folder.name; folderDescriptionInput.value = folder.description; modalTitle.textContent = 'تعديل المجلد'; folderModal.classList.remove('hidden'); } } if (button.classList.contains('delete-folder')) { if (confirm('هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟')) { showLoading(); await supabaseClient.from('files').delete().eq('folder_id', id); await supabaseClient.from('folders').delete().eq('id', id); hideLoading(); await fetchFolders(); } } });
+    
+    // Files
+    addFileButton.addEventListener('click', () => { fileForm.reset(); fileModal.classList.remove('hidden'); noteContentWrapper.classList.remove('hidden'); fileUploadWrapper.classList.add('hidden'); });
+    fileTypeSelect.addEventListener('change', () => { const isNote = fileTypeSelect.value === 'note'; noteContentWrapper.classList.toggle('hidden', !isNote); fileUploadWrapper.classList.toggle('hidden', isNote); });
+    fileForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const fileData = { name: fileNameInput.value, type: fileTypeSelect.value, folder_id: currentFolderId, user_id: currentUser.id }; if (fileData.type !== 'note') { const file = fileUploadInput.files[0]; if (!file) { alert('الرجاء اختيار ملف للرفع.'); hideLoading(); return; } const filePath = `${currentUser.id}/${currentFolderId}/${Date.now()}-${file.name}`; const { error } = await supabaseClient.storage.from('uploads').upload(filePath, file); if (error) { alert('خطأ في رفع الملف: ' + error.message); hideLoading(); return; } fileData.file_path = filePath; } else { fileData.content = noteContentInput.value; } const { error: insertError } = await supabaseClient.from('files').insert(fileData); hideLoading(); if (insertError) alert('خطأ في حفظ البيانات: ' + insertError.message); else { fileModal.classList.add('hidden'); await fetchFiles(currentFolderId); } });
+    filesList.addEventListener('click', async (e) => { const button = e.target.closest('.delete-file'); if (!button) return; const card = button.closest('.card'); const file = filesCache.find(f => f.id === card.dataset.id); if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) { showLoading(); if (file.file_path) { await supabaseClient.storage.from('uploads').remove([file.file_path]); } await supabaseClient.from('files').delete().eq('id', file.id); hideLoading(); await fetchFiles(currentFolderId); } });
+    
+    // General
+    searchInput.addEventListener('input', (e) => fetchFolders(e.target.value));
+    closeButtons.forEach(btn => { btn.addEventListener('click', () => { folderModal.classList.add('hidden'); fileModal.classList.add('hidden'); }); });
+    
+    // --- 6. INITIALIZATION ---
+    setupNavigation();
+    checkUser();
 
-    });
+});
     </script>
 </body>
 </html>
