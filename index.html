@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-
+<!-- The lang and dir attributes will be updated by JavaScript -->
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <!-- The title will be updated by JavaScript -->
     <title>الخزنة</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-  
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
- 
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -51,7 +49,6 @@
         }
         *, *::before, *::after { box-sizing: border-box; }
 
-        /* Language-specific font families */
         html[lang="ar"] body, html[lang="ar"] button, html[lang="ar"] input, html[lang="ar"] textarea, html[lang="ar"] select { font-family: 'Tajawal', sans-serif; }
         html[lang="en"] body, html[lang="en"] button, html[lang="en"] input, html[lang="en"] textarea, html[lang="en"] select { font-family: 'Roboto', sans-serif; }
         html[lang="he"] body, html[lang="he"] button, html[lang="he"] input, html[lang="he"] textarea, html[lang="he"] select { font-family: 'Heebo', sans-serif; }
@@ -64,7 +61,7 @@
         header h1 { color: var(--primary-color); margin: 0; font-size: 1.5rem; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; }
         .header-controls { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: flex-end; flex-grow: 1; align-items: center; }
         main { padding: 1.5rem; flex-grow: 1; overflow-y: auto; }
-        #auth-view { justify-content: center; align-items: center; padding: 1rem; background: linear-gradient(135deg, var(--primary-color) 0%, var(--background-color) 100%); }
+        #auth-view { justify-content: center; align-items: center; padding: 1rem; background: linear-gradient(135deg, var(--primary-color) 0%, var(--background-color) 100%); padding-bottom: 0; }
         .auth-container { padding: 2rem; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; margin-top: 1rem; transition: background 0.3s ease, box-shadow 0.3s ease; }
         .glassmorphism-card { background: var(--glass-background); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
         .auth-container h2 { margin-top: 0; margin-bottom: 1.5rem; font-weight: 700; font-size: 1.8rem; color: var(--text-color); }
@@ -99,6 +96,8 @@
         html[dir="ltr"] .close-button { right: 12px; }
         #loading-spinner { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .spinner { border: 6px solid var(--border-color); border-top: 6px solid var(--primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .bottom-nav { display: flex; justify-content: space-around; align-items: center; position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: var(--glass-background); backdrop-filter: blur(10px); border-top: 1px solid var(--glass-border); box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05); z-index: 900; }
         .bottom-nav .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px 0; background: none; border: none; color: var(--text-light); font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: color 0.2s ease; }
@@ -129,11 +128,11 @@
     
     <div id="folder-content-view" class="view hidden"><header class="glassmorphism-header"><button class="back-button"><i class="fas fa-arrow-right"></i></button><h1 id="current-folder-name"></h1></header><main><div class="toolbar"><h2 id="folder-content-title"></h2><input type="date" id="date-search-input"><button id="add-file-button" class="primary-btn"><i class="fas fa-plus"></i> <span data-translate-key="addItemButton">إضافة عنصر</span></button></div><div id="files-list" class="grid-container"></div></main></div>
     
-    <div id="media-viewer" class="view hidden"><header class="glassmorphism-header"><button class="back-button-media"><i class="fas fa-arrow-right"></i></button><h1 id="media-title"></h1></header><main class="media-container"><div id="image-viewer" class="hidden"><img id="image-display" src="" data-translate-alt="imageAlt" alt="صورة"></div><div id="video-viewer" class="hidden"><video id="video-display" controls></video></div><div id="text-viewer" class="hidden"><pre id="text-display"></pre></div></main></div>
+    <div id="media-viewer" class="view hidden"><header class="glassmorphism-header"><button class="back-button-media"><i class="fas fa-arrow-right"></i></button><h1 id="media-title"></h1></header><main class="media-container"><div id="image-viewer" class="hidden"><img id="image-display" src="" alt="Image"></div><div id="video-viewer" class="hidden"><video id="video-display" controls></video></div><div id="text-viewer" class="hidden"><pre id="text-display"></pre></div></main></div>
 
-    <div id="history-view" class="view hidden"><header class="glassmorphism-header"><h1><span data-translate-key="historyTitle">السجل</span></h1></header><main><div id="logs-list"></div></main></div>
+    <div id="history-view" class="view hidden"><header class="glassmorphism-header"><h1 data-translate-key="historyTitle">السجل</h1></header><main><div id="logs-list"></div></main></div>
 
-    <nav class="bottom-nav"><button class="nav-item active" data-view="main"><i class="fas fa-folder"></i><span data-translate-key="navFolders">المجلدات</span></button><button class="nav-item" data-view="history"><i class="fas fa-history"></i><span data-translate-key="navHistory">السجل</span></button></nav>
+    <nav class="bottom-nav hidden"><button class="nav-item active" data-view="main"><i class="fas fa-folder"></i><span data-translate-key="navFolders">المجلدات</span></button><button class="nav-item" data-view="history"><i class="fas fa-history"></i><span data-translate-key="navHistory">السجل</span></button></nav>
     
     <div id="folder-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3 id="modal-title"></h3><form id="folder-form"><input type="hidden" id="folder-id"><label for="folder-name" data-translate-key="folderNameLabel">اسم المجلد:</label><input type="text" id="folder-name" required><label for="folder-description" data-translate-key="descriptionLabel">وصف:</label><textarea id="folder-description" rows="3"></textarea><button type="submit" class="primary-btn" data-translate-key="saveButton">حفظ</button></form></div></div>
     <div id="file-modal" class="modal hidden"><div class="modal-content glassmorphism-card"><span class="close-button">&times;</span><h3 data-translate-key="addItemTitle">إضافة عنصر</h3><form id="file-form"><label for="file-name" data-translate-key="itemNameLabel">اسم العنصر:</label><input type="text" id="file-name" required><label for="file-type" data-translate-key="typeLabel">النوع:</label><select id="file-type"><option value="note" data-translate-key="typeNote">ملاحظة</option><option value="image" data-translate-key="typeImage">صورة</option><option value="video" data-translate-key="typeVideo">فيديو</option></select><div id="note-content-wrapper"><label for="note-content" data-translate-key="contentLabel">المحتوى:</label><textarea id="note-content" rows="5"></textarea></div><div id="file-upload-wrapper" class="hidden"><label for="file-upload" data-translate-key="chooseFileLabel">اختر ملف:</label><input type="file" id="file-upload"></div><button type="submit" class="primary-btn" data-translate-key="saveButton">حفظ</button></form></div></div>
@@ -143,569 +142,350 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-    const translations = { /* ... (Your translations object remains the same) ... */ 
-        ar: {
-            pageTitle: "الخزنة", loginTitle: "تسجيل الدخول", emailPlaceholder: "البريد الإلكتروني", passwordPlaceholder: "كلمة المرور",
-            loginButton: "دخول", noAccount: "ليس لديك حساب؟", createAccountLink: "أنشئ حسابًا",
-            signupTitle: "حساب جديد", signupButton: "تسجيل", haveAccount: "لديك حساب؟", loginLink: "سجل الدخول",
-            vaultTitle: "الخزنة", searchPlaceholder: "ابحث...", logoutButton: "تسجيل الخروج",
-            yourFolders: "مجلداتك", newFolderButton: "مجلد جديد", navFolders: "المجلدات",
-            folderContents: "محتويات:", addItemButton: "إضافة عنصر", imageAlt: "صورة",
-            folderNameLabel: "اسم المجلد:", descriptionLabel: "وصف:", saveButton: "حفظ",
-            addItemTitle: "إضافة عنصر", itemNameLabel: "اسم العنصر:", typeLabel: "النوع:",
-            typeNote: "ملاحظة", typeImage: "صورة", typeVideo: "فيديو",
-            contentLabel: "المحتوى:", chooseFileLabel: "اختر ملف:",
-            noFolders: "لا يوجد مجلدات.", noDescription: "لا يوجد وصف", edit: "تعديل", delete: "حذف",
-            emptyFolder: "هذا المجلد فارغ.", fileType: "ملف",
-            newFolderModalTitle: "مجلد جديد", editFolderModalTitle: "تعديل المجلد",
-            alertConfirmEmail: "تم إرسال رابط تأكيد إلى بريدك الإلكتروني!", alertLinkError: "خطأ في إنشاء رابط العرض: ",
-            alertChooseFile: "الرجاء اختيار ملف للرفع.", alertUploadError: "خطأ في رفع الملف: ",
-            alertSaveError: "خطأ في حفظ البيانات: ", confirmDeleteFolder: "هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟",
-            confirmDeleteItem: "هل أنت متأكد من حذف هذا العنصر؟",
-            navHistory: "السجل", historyTitle: "سجل النشاطات", noLogs: "لا يوجد نشاطات مسجلة.",
-            logCreateFolder: "أنشأ مجلد:", logDeleteFolder: "حذف مجلد:", logCreateFile: "أنشأ ملف:", logDeleteFile: "حذف ملف:",
-        },
-        en: {
-            pageTitle: "The Vault", loginTitle: "Login", emailPlaceholder: "Email", passwordPlaceholder: "Password",
-            loginButton: "Login", noAccount: "Don't have an account?", createAccountLink: "Create one",
-            signupTitle: "New Account", signupButton: "Sign Up", haveAccount: "Have an account?", loginLink: "Log in",
-            vaultTitle: "The Vault", searchPlaceholder: "Search...", logoutButton: "Logout",
-            yourFolders: "Your Folders", newFolderButton: "New Folder", navFolders: "Folders",
-            folderContents: "Contents:", addItemButton: "Add Item", imageAlt: "Image",
-            folderNameLabel: "Folder Name:", descriptionLabel: "Description:", saveButton: "Save",
-            addItemTitle: "Add Item", itemNameLabel: "Item Name:", typeLabel: "Type:",
-            typeNote: "Note", typeImage: "Image", typeVideo: "Video", contentLabel: "Content:", chooseFileLabel: "Choose file:",
-            noFolders: "No folders found.", noDescription: "No description", edit: "Edit", delete: "Delete",
-            emptyFolder: "This folder is empty.", fileType: "file",
-            newFolderModalTitle: "New Folder", editFolderModalTitle: "Edit Folder",
-            alertConfirmEmail: "A confirmation link has been sent to your email!", alertLinkError: "Error creating view link: ",
-            alertChooseFile: "Please choose a file to upload.", alertUploadError: "Error uploading file: ",
-            alertSaveError: "Error saving data: ", confirmDeleteFolder: "Are you sure you want to delete this folder and all its contents?",
-            confirmDeleteItem: "Are you sure you want to delete this item?",
-            navHistory: "History", historyTitle: "Activity Log", noLogs: "No activity logged yet.",
-            logCreateFolder: "Created folder:", logDeleteFolder: "Deleted folder:", logCreateFile: "Created file:", logDeleteFile: "Deleted file:",
-        },
-        he: {
-            pageTitle: "הכספת", loginTitle: "כניסה", emailPlaceholder: "אימייל", passwordPlaceholder: "סיסמה",
-            loginButton: "כניסה", noAccount: "אין לך חשבון?", createAccountLink: "צור חשבון",
-            signupTitle: "חשבון חדש", signupButton: "הרשמה", haveAccount: "יש לך חשבון?", loginLink: "התחבר",
-            vaultTitle: "הכספת", searchPlaceholder: "חפש...", logoutButton: "התנתק",
-            yourFolders: "התיקיות שלך", newFolderButton: "תיקיה חדשה", navFolders: "תיקיות",
-            folderContents: "תוכן:", addItemButton: "הוסף פריט", imageAlt: "תמונה",
-            folderNameLabel: "שם התיקיה:", descriptionLabel: "תיאור:", saveButton: "שמור",
-            addItemTitle: "הוסף פריט", itemNameLabel: "שם הפריט:", typeLabel: "סוג:",
-            typeNote: "הערה", typeImage: "תמונה", typeVideo: "וידאו", contentLabel: "תוכן:", chooseFileLabel: "בחר קובץ:",
-            noFolders: "אין תיקיות.", noDescription: "אין תיאור", edit: "ערוך", delete: "מחק",
-            emptyFolder: "התיקיה הזו ריקה.", fileType: "קובץ",
-            newFolderModalTitle: "תיקיה חדשה", editFolderModalTitle: "ערוך תיקיה",
-            alertConfirmEmail: "קישור אישור נשלח לאימייל שלך!", alertLinkError: "שגיאה ביצירת קישור לצפייה: ",
-            alertChooseFile: "אנא בחר קובץ להעלאה.", alertUploadError: "שגיאה בהעלאת הקובץ: ",
-            alertSaveError: "שגיאה בשמירת הנתונים: ", confirmDeleteFolder: "האם אתה בטוח שברצונך למחוק את התיקיה הזו וכל תכניה?",
-            confirmDeleteItem: "האם אתה בטוח שברצונך למחוק את הפריט הזה?",
-            navHistory: "היסטוריה", historyTitle: "יומן פעילות", noLogs: "אין פעילות רשומה עדיין.",
-            logCreateFolder: "יצר תיקיה:", logDeleteFolder: "מחק תיקיה:", logCreateFile: "יצר קובץ:", logDeleteFile: "מחק קובץ:",
-        }
-    };
-    let currentLang = localStorage.getItem('language') || 'ar';
-
-    // --- 1. SUPABASE SETUP ---
-    const SUPABASE_URL = 'https://inexkigotfyhsprhbqyn.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZXhraWdvdGZ5aHNwcmhicXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNTc4NDcsImV4cCI6MjA3MTYzMzg0N30.nkDBDL-BFHaTJAUdxzXrPqOzpWonDyr2jkKO2S_UwbU';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // --- 2. DOM ELEMENTS ---
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const views = {
-        auth: document.getElementById('auth-view'),
-        main: document.getElementById('main-view'),
-        folderContent: document.getElementById('folder-content-view'),
-        mediaViewer: document.getElementById('media-viewer'),
-        history: document.getElementById('history-view')
-    };
-    // Auth elements
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const showSignupLink = document.getElementById('show-signup');
-    const showLoginLink = document.getElementById('show-login');
-    const signupContainer = document.getElementById('signup-container');
-    const logoutButton = document.getElementById('logout-button');
-    // Folder elements
-    const foldersList = document.getElementById('folders-list');
-    const addFolderButton = document.getElementById('add-folder-button');
-    const folderModal = document.getElementById('folder-modal');
-    const folderForm = document.getElementById('folder-form');
-    const folderIdInput = document.getElementById('folder-id');
-    const folderNameInput = document.getElementById('folder-name');
-    const folderDescriptionInput = document.getElementById('folder-description');
-    const folderModalTitle = document.getElementById('modal-title');
-    // File elements
-    const filesList = document.getElementById('files-list');
-    const addFileButton = document.getElementById('add-file-button');
-    const fileModal = document.getElementById('file-modal');
-    const fileForm = document.getElementById('file-form');
-    const fileNameInput = document.getElementById('file-name');
-    const fileTypeSelect = document.getElementById('file-type');
-    const noteContentWrapper = document.getElementById('note-content-wrapper');
-    const noteContentInput = document.getElementById('note-content');
-    const fileUploadWrapper = document.getElementById('file-upload-wrapper');
-    const fileUploadInput = document.getElementById('file-upload');
-    // View-specific elements
-    const currentFolderNameHeader = document.getElementById('current-folder-name');
-    const folderContentTitleHeader = document.getElementById('folder-content-title');
-    const searchInput = document.getElementById('search-input');
-    const dateSearchInput = document.getElementById('date-search-input');
-    const logsList = document.getElementById('logs-list');
-    // Media viewer elements
-    const mediaTitle = document.getElementById('media-title');
-    const imageViewer = document.getElementById('image-viewer');
-    const videoViewer = document.getElementById('video-viewer');
-    const textViewer = document.getElementById('text-viewer');
-    const imageDisplay = document.getElementById('image-display');
-    const videoDisplay = document.getElementById('video-display');
-    const textDisplay = document.getElementById('text-display');
-    // Navigation
-    const bottomNav = document.querySelector('.bottom-nav');
-    const closeButtons = document.querySelectorAll('.close-button');
-
-    // --- 3. APPLICATION STATE ---
-    let currentUser = null;
-    let currentFolderId = null;
-    let foldersCache = [];
-    let filesCache = [];
-
-    // --- 4. UTILITY & HELPER FUNCTIONS ---
-    const showLoading = () => loadingSpinner.classList.remove('hidden');
-    const hideLoading = () => loadingSpinner.classList.add('hidden');
-
-    const showModal = (modalElement) => modalElement.classList.remove('hidden');
-    const hideModals = () => {
-        folderModal.classList.add('hidden');
-        fileModal.classList.add('hidden');
-    };
-
-    const translate = (key) => translations[currentLang]?.[key] || key;
-
-    const setLanguage = (lang) => {
-        currentLang = lang;
-        localStorage.setItem('language', lang);
-        const langData = translations[lang];
-        const isRTL = lang === 'ar' || lang === 'he';
-
-        document.documentElement.lang = lang;
-        document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
-
-        document.querySelectorAll('[data-translate-key]').forEach(el => {
-            const key = el.dataset.translateKey;
-            if (langData[key]) el.innerText = langData[key];
-        });
-        document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
-            const key = el.dataset.translatePlaceholder;
-            if (langData[key]) el.placeholder = langData[key];
-        });
-        document.title = langData.pageTitle;
-        
-        document.querySelectorAll('.lang-switcher button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`lang-${lang}`).classList.add('active');
-        
-        // Re-render content if user is logged in
-        if (currentUser) {
-            renderFolders(foldersCache);
-            if (currentFolderId) renderFiles(filesCache);
-        }
-    };
-
-    // --- 5. CORE LOGIC FUNCTIONS ---
-
-    // Navigation
-    const setActiveView = (viewName) => {
-        Object.values(views).forEach(v => v.classList.add('hidden'));
-        if (views[viewName]) views[viewName].classList.remove('hidden');
-
-        bottomNav.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.toggle('active', item.dataset.view === viewName);
-        });
-
-        if (viewName === 'history') fetchLogs();
-        if (viewName === 'main') fetchFolders();
-    };
-
-   
-    const logAction = async (action, details = {}) => {
-        if (!currentUser) return;
-        await supabaseClient.from('logs').insert({ user_id: currentUser.id, action, details });
-    };
-
-
-    const checkUserSession = async () => {
-        showLoading();
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        currentUser = session?.user || null;
-        if (currentUser) {
-            setActiveView('main');
-        } else {
-            setActiveView('auth');
-        }
-        hideLoading();
-    };
-
-    const fetchFolders = async (searchTerm = '') => {
-        if (!currentUser) return;
-        showLoading();
-        let query = supabaseClient.from('folders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-        if (searchTerm) query = query.ilike('name', `%${searchTerm}%`);
-        
-        const { data, error } = await query;
-        hideLoading();
-
-        if (error) {
-            console.error('Error fetching folders:', error);
-            alert(error.message);
-        } else {
-            foldersCache = data || [];
-            renderFolders(foldersCache);
-        }
-    };
-    
-    const renderFolders = (folders) => {
-        foldersList.innerHTML = '';
-        if (folders.length === 0) {
-            foldersList.innerHTML = `<p>${translate('noFolders')}</p>`;
-            return;
-        }
-        folders.forEach(folder => {
-            const folderEl = document.createElement('div');
-            folderEl.className = 'card';
-            folderEl.dataset.id = folder.id;
-            folderEl.dataset.name = folder.name;
-            folderEl.innerHTML = `
-                <h4><i class="fas fa-folder" style="color: #4A90E2;"></i> ${folder.name}</h4>
-                <p>${folder.description || translate('noDescription')}</p>
-                <div class="card-footer">
-                    <span>${new Date(folder.created_at).toLocaleDateString()}</span>
-                    <div class="card-actions">
-                        <button class="edit-folder" title="${translate('edit')}"><i class="fas fa-pen"></i></button>
-                        <button class="delete-folder" title="${translate('delete')}"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>`;
-            foldersList.appendChild(folderEl);
-        });
-    };
-
-    const openFolder = (folderId, folderName) => {
-        currentFolderId = folderId;
-        dateSearchInput.value = '';
-        setActiveView('folderContent');
-        currentFolderNameHeader.textContent = folderName;
-        folderContentTitleHeader.textContent = `${translate('folderContents')} ${folderName}`;
-        fetchFiles(folderId);
-    };
-
- 
-    const fetchFiles = async (folderId, searchDate = null) => {
-        showLoading();
-        let query = supabaseClient.from('files').select('*').eq('folder_id', folderId).order('created_at', { ascending: false });
-        if (searchDate) {
-            const startDate = `${searchDate}T00:00:00`;
-            const endDate = `${searchDate}T23:59:59`;
-            query = query.gte('created_at', startDate).lte('created_at', endDate);
-        }
-        const { data, error } = await query;
-        hideLoading();
-        if (error) {
-            console.error('Error fetching files:', error);
-        } else {
-            filesCache = data || [];
-            renderFiles(filesCache);
-        }
-    };
-    
-    const renderFiles = (files) => {
-        filesList.innerHTML = '';
-        if (files.length === 0) {
-            filesList.innerHTML = `<p>${translate('emptyFolder')}</p>`;
-            return;
-        }
-        files.forEach(file => {
-            const icon = file.type === 'note' ? 'fa-sticky-note' : (file.type === 'image' ? 'fa-image' : 'fa-video');
-            const fileEl = document.createElement('div');
-            fileEl.className = 'card';
-            fileEl.dataset.id = file.id;
-            fileEl.innerHTML = `
-                <h4><i class="fas ${icon}"></i> ${file.name}</h4>
-                <p>${file.type === 'note' ? ((file.content || '').substring(0, 50) + '...') : `${translate('fileType')} ${file.type}`}</p>
-                <div class="card-footer">
-                    <span>${new Date(file.created_at).toLocaleDateString()}</span>
-                    <div class="card-actions">
-                        <button class="delete-file" title="${translate('delete')}"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>`;
-            filesList.appendChild(fileEl);
-        });
-    };
-    
-    const openMediaViewer = async (fileId) => {
-        const file = filesCache.find(f => f.id === fileId);
-        if (!file) return;
-
-        mediaTitle.textContent = file.name;
-        imageViewer.classList.add('hidden');
-        videoViewer.classList.add('hidden');
-        textViewer.classList.add('hidden');
-        setActiveView('mediaViewer');
-
-        if (file.type === 'note') {
-            textDisplay.textContent = file.content;
-            textViewer.classList.remove('hidden');
-        } else if (file.file_path) {
-            showLoading();
-            const { data, error } = await supabaseClient.storage.from('uploads').createSignedUrl(file.file_path, 3600); 
-            hideLoading();
-            if (error) {
-                alert(translate('alertLinkError') + error.message);
-                setActiveView('folderContent'); 
-                return;
+        // --- 0. LANGUAGE TRANSLATIONS & SETUP ---
+        const translations = {
+            ar: {
+                pageTitle: "الخزنة", loginTitle: "تسجيل الدخول", emailPlaceholder: "البريد الإلكتروني", passwordPlaceholder: "كلمة المرور",
+                loginButton: "دخول", noAccount: "ليس لديك حساب؟", createAccountLink: "أنشئ حسابًا",
+                signupTitle: "حساب جديد", signupButton: "تسجيل", haveAccount: "لديك حساب؟", loginLink: "سجل الدخول",
+                vaultTitle: "الخزنة", searchPlaceholder: "ابحث...", logoutButton: "تسجيل الخروج",
+                yourFolders: "مجلداتك", newFolderButton: "مجلد جديد", navFolders: "المجلدات",
+                folderContents: "محتويات:", addItemButton: "إضافة عنصر", imageAlt: "صورة",
+                folderNameLabel: "اسم المجلد:", descriptionLabel: "وصف:", saveButton: "حفظ",
+                addItemTitle: "إضافة عنصر", itemNameLabel: "اسم العنصر:", typeLabel: "النوع:",
+                typeNote: "ملاحظة", typeImage: "صورة", typeVideo: "فيديو",
+                contentLabel: "المحتوى:", chooseFileLabel: "اختر ملف:",
+                noFolders: "لا يوجد مجلدات.", noDescription: "لا يوجد وصف", edit: "تعديل", delete: "حذف",
+                emptyFolder: "هذا المجلد فارغ.", fileType: "ملف",
+                newFolderModalTitle: "مجلد جديد", editFolderModalTitle: "تعديل المجلد",
+                alertConfirmEmail: "تم إرسال رابط تأكيد إلى بريدك الإلكتروني!", alertLinkError: "خطأ في إنشاء رابط العرض: ",
+                alertChooseFile: "الرجاء اختيار ملف للرفع.", alertUploadError: "خطأ في رفع الملف: ",
+                alertSaveError: "خطأ في حفظ البيانات: ", confirmDeleteFolder: "هل أنت متأكد من حذف هذا المجلد وكل محتوياته؟",
+                confirmDeleteItem: "هل أنت متأكد من حذف هذا العنصر؟",
+                navHistory: "السجل", historyTitle: "سجل النشاطات", noLogs: "لا يوجد نشاطات مسجلة.",
+                logCreateFolder: "أنشأ مجلد:", logDeleteFolder: "حذف مجلد:", logCreateFile: "أنشأ ملف:", logDeleteFile: "حذف ملف:",
+            },
+            en: {
+                pageTitle: "The Vault", loginTitle: "Login", emailPlaceholder: "Email", passwordPlaceholder: "Password",
+                loginButton: "Login", noAccount: "Don't have an account?", createAccountLink: "Create one",
+                signupTitle: "New Account", signupButton: "Sign Up", haveAccount: "Have an account?", loginLink: "Log in",
+                vaultTitle: "The Vault", searchPlaceholder: "Search...", logoutButton: "Logout",
+                yourFolders: "Your Folders", newFolderButton: "New Folder", navFolders: "Folders",
+                folderContents: "Contents:", addItemButton: "Add Item", imageAlt: "Image",
+                folderNameLabel: "Folder Name:", descriptionLabel: "Description:", saveButton: "Save",
+                addItemTitle: "Add Item", itemNameLabel: "Item Name:", typeLabel: "Type:",
+                typeNote: "Note", typeImage: "Image", typeVideo: "Video", contentLabel: "Content:", chooseFileLabel: "Choose file:",
+                noFolders: "No folders found.", noDescription: "No description", edit: "Edit", delete: "Delete",
+                emptyFolder: "This folder is empty.", fileType: "file",
+                newFolderModalTitle: "New Folder", editFolderModalTitle: "Edit Folder",
+                alertConfirmEmail: "A confirmation link has been sent to your email!", alertLinkError: "Error creating view link: ",
+                alertChooseFile: "Please choose a file to upload.", alertUploadError: "Error uploading file: ",
+                alertSaveError: "Error saving data: ", confirmDeleteFolder: "Are you sure you want to delete this folder and all its contents?",
+                confirmDeleteItem: "Are you sure you want to delete this item?",
+                navHistory: "History", historyTitle: "Activity Log", noLogs: "No activity logged yet.",
+                logCreateFolder: "Created folder:", logDeleteFolder: "Deleted folder:", logCreateFile: "Created file:", logDeleteFile: "Deleted file:",
+            },
+            he: {
+                pageTitle: "הכספת", loginTitle: "כניסה", emailPlaceholder: "אימייל", passwordPlaceholder: "סיסמה",
+                loginButton: "כניסה", noAccount: "אין לך חשבון?", createAccountLink: "צור חשבון",
+                signupTitle: "חשבון חדש", signupButton: "הרשמה", haveAccount: "יש לך חשבון?", loginLink: "התחבר",
+                vaultTitle: "הכספת", searchPlaceholder: "חפש...", logoutButton: "התנתק",
+                yourFolders: "התיקיות שלך", newFolderButton: "תיקיה חדשה", navFolders: "תיקיות",
+                folderContents: "תוכן:", addItemButton: "הוסף פריט", imageAlt: "תמונה",
+                folderNameLabel: "שם התיקיה:", descriptionLabel: "תיאור:", saveButton: "שמור",
+                addItemTitle: "הוסף פריט", itemNameLabel: "שם הפריט:", typeLabel: "סוג:",
+                typeNote: "הערה", typeImage: "תמונה", typeVideo: "וידאו", contentLabel: "תוכן:", chooseFileLabel: "בחר קובץ:",
+                noFolders: "אין תיקיות.", noDescription: "אין תיאור", edit: "ערוך", delete: "מחק",
+                emptyFolder: "התיקיה הזו ריקה.", fileType: "קובץ",
+                newFolderModalTitle: "תיקיה חדשה", editFolderModalTitle: "ערוך תיקיה",
+                alertConfirmEmail: "קישור אישור נשלח לאימייל שלך!", alertLinkError: "שגיאה ביצירת קישור לצפייה: ",
+                alertChooseFile: "אנא בחר קובץ להעלאה.", alertUploadError: "שגיאה בהעלאת הקובץ: ",
+                alertSaveError: "שגיאה בשמירת הנתונים: ", confirmDeleteFolder: "האם אתה בטוח שברצונך למחוק את התיקיה הזו וכל תכניה?",
+                confirmDeleteItem: "האם אתה בטוח שברצונך למחוק את הפריט הזה?",
+                navHistory: "היסטוריה", historyTitle: "יומן פעילות", noLogs: "אין פעילות רשומה עדיין.",
+                logCreateFolder: "יצר תיקיה:", logDeleteFolder: "מחק תיקיה:", logCreateFile: "יצר קובץ:", logDeleteFile: "מחק קובץ:",
             }
-            if (file.type === 'image') {
-                imageDisplay.src = data.signedUrl;
-                imageViewer.classList.remove('hidden');
-            } else if (file.type === 'video') {
-                videoDisplay.src = data.signedUrl;
-                videoViewer.classList.remove('hidden');
-            }
-        }
-    };
+        };
+        let currentLang = localStorage.getItem('language') || 'ar';
 
-    
-    const fetchLogs = async () => {
-        if (!currentUser) return;
-        showLoading();
-        const { data: logs, error } = await supabaseClient.from('logs').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(100);
-        hideLoading();
-        if(error) { console.error('Error fetching logs:', error); return; }
-        renderLogs(logs || []);
-    };
-    
-    const renderLogs = (logs) => {
-        logsList.innerHTML = '';
-        if (logs.length === 0) {
-            logsList.innerHTML = `<p>${translate('noLogs')}</p>`;
-            return;
-        }
-        logs.forEach(log => {
-            const logEl = document.createElement('div');
-            logEl.className = 'log-item';
-            const actionKey = `log${log.action.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('')}`;
-            const actionText = translate(actionKey);
-            const detailsText = log.details && log.details.name ? `"${log.details.name}"` : '';
-            logEl.innerHTML = `<p>${actionText} <strong>${detailsText}</strong></p><span>${new Date(log.created_at).toLocaleString()}</span>`;
-            logsList.appendChild(logEl);
-        });
-    };
+        // --- 1. SUPABASE SETUP ---
+        const SUPABASE_URL = 'https://inexkigotfyhsprhbqyn.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluZXhraWdvdGZ5aHNwcmhicXluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNTc4NDcsImV4cCI6MjA3MTYzMzg0N30.nkDBDL-BFHaTJAUdxzXrPqOzpWonDyr2jkKO2S_UwbU';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function setupEventListeners() {
-       
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading();
-            const email = loginForm.querySelector('#login-email').value;
-            const password = loginForm.querySelector('#login-password').value;
-            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            hideLoading();
-            if (error) alert(error.message);
-            else checkUserSession();
-        });
+        // --- 2. DOM ELEMENTS ---
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const views = { auth: document.getElementById('auth-view'), main: document.getElementById('main-view'), folderContent: document.getElementById('folder-content-view'), mediaViewer: document.getElementById('media-viewer'), history: document.getElementById('history-view') };
+        const loginForm = document.getElementById('login-form'), signupForm = document.getElementById('signup-form');
+        const showSignupLink = document.getElementById('show-signup'), showLoginLink = document.getElementById('show-login');
+        const signupContainer = document.getElementById('signup-container'), logoutButton = document.getElementById('logout-button');
+        const foldersList = document.getElementById('folders-list'), addFolderButton = document.getElementById('add-folder-button');
+        const folderModal = document.getElementById('folder-modal'), folderForm = document.getElementById('folder-form');
+        const folderIdInput = document.getElementById('folder-id'), folderNameInput = document.getElementById('folder-name'), folderDescriptionInput = document.getElementById('folder-description');
+        const folderModalTitle = document.getElementById('modal-title');
+        const filesList = document.getElementById('files-list'), addFileButton = document.getElementById('add-file-button');
+        const fileModal = document.getElementById('file-modal'), fileForm = document.getElementById('file-form');
+        const fileNameInput = document.getElementById('file-name'), fileTypeSelect = document.getElementById('file-type');
+        const noteContentWrapper = document.getElementById('note-content-wrapper'), noteContentInput = document.getElementById('note-content');
+        const fileUploadWrapper = document.getElementById('file-upload-wrapper'), fileUploadInput = document.getElementById('file-upload');
+        const currentFolderNameHeader = document.getElementById('current-folder-name'), folderContentTitleHeader = document.getElementById('folder-content-title');
+        const searchInput = document.getElementById('search-input'), dateSearchInput = document.getElementById('date-search-input');
+        const logsList = document.getElementById('logs-list');
+        const mediaTitle = document.getElementById('media-title'), imageViewer = document.getElementById('image-viewer'), videoViewer = document.getElementById('video-viewer'), textViewer = document.getElementById('text-viewer');
+        const imageDisplay = document.getElementById('image-display'), videoDisplay = document.getElementById('video-display'), textDisplay = document.getElementById('text-display');
+        const bottomNav = document.querySelector('.bottom-nav'), closeButtons = document.querySelectorAll('.close-button');
 
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading();
-            const email = signupForm.querySelector('#signup-email').value;
-            const password = signupForm.querySelector('#signup-password').value;
-            const { error } = await supabaseClient.auth.signUp({ email, password });
-            hideLoading();
-            if (error) alert(error.message);
-            else alert(translate('alertConfirmEmail'));
-        });
+        // --- 3. APPLICATION STATE ---
+        let currentUser = null, currentFolderId = null;
+        let foldersCache = [], filesCache = [];
 
-        logoutButton.addEventListener('click', async () => {
-            showLoading();
-            await supabaseClient.auth.signOut();
-            hideLoading();
-            checkUserSession();
-        });
+        // --- 4. UTILITY & HELPER FUNCTIONS ---
+        const showLoading = () => loadingSpinner.classList.remove('hidden');
+        const hideLoading = () => loadingSpinner.classList.add('hidden');
+        const showModal = (modalElement) => modalElement.classList.remove('hidden');
+        const hideModals = () => { folderModal.classList.add('hidden'); fileModal.classList.add('hidden'); };
+        const translate = (key) => translations[currentLang]?.[key] || key;
 
-        showSignupLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'block'; loginForm.parentElement.style.display = 'none'; });
-        showLoginLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'none'; loginForm.parentElement.style.display = 'block'; });
+        const setLanguage = (lang) => {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            const langData = translations[lang];
+            const isRTL = lang === 'ar' || lang === 'he';
+            document.documentElement.lang = lang;
+            document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            document.querySelectorAll('[data-translate-key]').forEach(el => { const key = el.dataset.translateKey; if (langData[key]) el.innerText = langData[key]; });
+            document.querySelectorAll('[data-translate-placeholder]').forEach(el => { const key = el.dataset.translatePlaceholder; if (langData[key]) el.placeholder = langData[key]; });
+            document.title = langData.pageTitle;
+            document.querySelectorAll('.lang-switcher button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            if (currentUser) { renderFolders(foldersCache); if (currentFolderId) renderFiles(filesCache); }
+        };
 
-        addFolderButton.addEventListener('click', () => {
-            folderForm.reset();
-            folderIdInput.value = '';
-            folderModalTitle.textContent = translate('newFolderModalTitle');
-            showModal(folderModal);
-        });
+        // --- 5. CORE LOGIC FUNCTIONS ---
+        const setActiveView = (viewName) => {
+            Object.values(views).forEach(v => v.classList.add('hidden'));
+            if (views[viewName]) views[viewName].classList.remove('hidden');
 
-        addFileButton.addEventListener('click', () => {
-            fileForm.reset();
-            fileTypeSelect.dispatchEvent(new Event('change')); 
-            showModal(fileModal);
-        });
-        
-        closeButtons.forEach(btn => btn.addEventListener('click', hideModals));
-
-       
-        folderForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoading();
-            const name = folderNameInput.value;
-            const description = folderDescriptionInput.value;
-            const folderId = folderIdInput.value;
-            const isEditing = !!folderId;
-
-            if (isEditing) {
-                const { error } = await supabaseClient.from('folders').update({ name, description }).eq('id', folderId);
-                hideLoading();
-                if (error) alert(error.message);
-                else {
-                    hideModals();
-                    fetchFolders(searchInput.value); 
-                }
+            if (viewName === 'auth') {
+                bottomNav.classList.add('hidden');
             } else {
-                const { data: newFolder, error } = await supabaseClient.from('folders')
-                    .insert({ name, description, user_id: currentUser.id })
-                    .select().single();
-                hideLoading();
-                if (error) alert(error.message);
-                else if (newFolder) {
-                    hideModals();
-                    foldersCache.unshift(newFolder);
-                    renderFolders(foldersCache);
-                    logAction('CREATE_FOLDER', { name });
-                }
+                bottomNav.classList.remove('hidden');
+                bottomNav.querySelectorAll('.nav-item').forEach(item => {
+                    const isMainContext = ['main', 'folderContent', 'mediaViewer'].includes(viewName);
+                    item.classList.toggle('active', (item.dataset.view === 'main' && isMainContext) || (item.dataset.view === viewName));
+                });
             }
-        });
 
-        fileForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            if (viewName === 'history') fetchLogs();
+            if (viewName === 'main') fetchFolders();
+        };
+
+        const logAction = async (action, details = {}) => {
+            if (!currentUser) return;
+            await supabaseClient.from('logs').insert({ user_id: currentUser.id, action, details });
+        };
+
+        const checkUserSession = async () => {
             showLoading();
-            const name = fileNameInput.value;
-            const type = fileTypeSelect.value;
-            const fileData = { name, type, folder_id: currentFolderId, user_id: currentUser.id };
-            
-            try {
-                if (type !== 'note') {
-                    const file = fileUploadInput.files[0];
-                    if (!file) throw new Error(translate('alertChooseFile'));
-                    const filePath = `${currentUser.id}/${currentFolderId}/${Date.now()}-${file.name}`;
-                    const { error: uploadError } = await supabaseClient.storage.from('uploads').upload(filePath, file);
-                    if (uploadError) throw uploadError;
-                    fileData.file_path = filePath;
-                } else {
-                    fileData.content = noteContentInput.value;
-                }
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            currentUser = session?.user || null;
+            if (currentUser) setActiveView('main');
+            else setActiveView('auth');
+            hideLoading();
+        };
 
-                const { data: newFile, error: insertError } = await supabaseClient.from('files').insert(fileData).select().single();
-                if (insertError) throw insertError;
-                
-                if (newFile) {
-                    hideModals();
-                    filesCache.unshift(newFile);
-                    renderFiles(filesCache);
-                    logAction('CREATE_FILE', { name });
-                }
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                hideLoading();
-            }
-        });
+        const fetchFolders = async (searchTerm = '') => {
+            if (!currentUser) return;
+            showLoading();
+            let query = supabaseClient.from('folders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+            if (searchTerm) query = query.ilike('name', `%${searchTerm}%`);
+            const { data, error } = await query;
+            hideLoading();
+            if (error) { console.error('Error fetching folders:', error); alert(error.message); }
+            else { foldersCache = data || []; renderFolders(foldersCache); }
+        };
+        
+        const renderFolders = (folders) => {
+            foldersList.innerHTML = '';
+            if (folders.length === 0) { foldersList.innerHTML = `<p>${translate('noFolders')}</p>`; return; }
+            folders.forEach(folder => {
+                const folderEl = document.createElement('div');
+                folderEl.className = 'card';
+                folderEl.dataset.id = folder.id;
+                folderEl.dataset.name = folder.name;
+                folderEl.innerHTML = `<h4><i class="fas fa-folder" style="color: #4A90E2;"></i> ${folder.name}</h4><p>${folder.description || translate('noDescription')}</p><div class="card-footer"><span>${new Date(folder.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="edit-folder" title="${translate('edit')}"><i class="fas fa-pen"></i></button><button class="delete-folder" title="${translate('delete')}"><i class="fas fa-trash"></i></button></div></div>`;
+                foldersList.appendChild(folderEl);
+            });
+        };
 
-        foldersList.addEventListener('click', async (e) => {
-            const button = e.target.closest('button');
-            const card = e.target.closest('.card');
-            if (!card) return;
-
-            if (button) { 
-                const folderId = card.dataset.id;
-                const folderName = card.dataset.name;
-                
-                if (button.classList.contains('edit-folder')) {
-                    const folder = foldersCache.find(f => f.id === folderId);
-                    if (folder) {
-                        folderIdInput.value = folder.id;
-                        folderNameInput.value = folder.name;
-                        folderDescriptionInput.value = folder.description;
-                        folderModalTitle.textContent = translate('editFolderModalTitle');
-                        showModal(folderModal);
-                    }
-                } else if (button.classList.contains('delete-folder')) {
-                    if (confirm(translate('confirmDeleteFolder'))) {
-                        showLoading();
-                        await supabaseClient.from('files').delete().eq('folder_id', folderId);
-                        await supabaseClient.from('folders').delete().eq('id', folderId);
-                        hideLoading();
-                        foldersCache = foldersCache.filter(f => f.id !== folderId);
-                        renderFolders(foldersCache);
-                        logAction('DELETE_FOLDER', { name: folderName });
-                    }
-                }
-            } else { 
-                openFolder(card.dataset.id, card.dataset.name);
-            }
-        });
-
-        filesList.addEventListener('click', async (e) => {
-            const button = e.target.closest('button');
-            const card = e.target.closest('.card');
-            if (!card) return;
-            const fileId = card.dataset.id;
-            
-            if (button && button.classList.contains('delete-file')) {
-                 if (confirm(translate('confirmDeleteItem'))) {
-                    const file = filesCache.find(f => f.id === fileId);
-                    if (!file) return;
-                    showLoading();
-                    if (file.file_path) await supabaseClient.storage.from('uploads').remove([file.file_path]);
-                    await supabaseClient.from('files').delete().eq('id', fileId);
-                    hideLoading();
-                    filesCache = filesCache.filter(f => f.id !== fileId);
-                    renderFiles(filesCache);
-                    logAction('DELETE_FILE', { name: file.name });
-                 }
-            } else {
-                openMediaViewer(fileId);
-            }
-        });
-
-    
-        searchInput.addEventListener('input', (e) => fetchFolders(e.target.value));
-        dateSearchInput.addEventListener('input', (e) => fetchFiles(currentFolderId, e.target.value));
-        fileTypeSelect.addEventListener('change', () => {
-            const isNote = fileTypeSelect.value === 'note';
-            noteContentWrapper.classList.toggle('hidden', !isNote);
-            fileUploadWrapper.classList.toggle('hidden', isNote);
-        });
-
-       
-        bottomNav.addEventListener('click', (e) => {
-            const navItem = e.target.closest('.nav-item');
-            if (navItem?.dataset.view) setActiveView(navItem.dataset.view);
-        });
-        document.querySelectorAll('.back-button').forEach(btn => btn.addEventListener('click', () => setActiveView('main')));
-        document.querySelector('.back-button-media').addEventListener('click', () => {
-            videoDisplay.pause();
-            videoDisplay.src = '';
+        const openFolder = (folderId, folderName) => {
+            currentFolderId = folderId;
+            dateSearchInput.value = '';
             setActiveView('folderContent');
-        });
-        
-  
-        document.getElementById('lang-ar').addEventListener('click', () => setLanguage('ar'));
-        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
-        document.getElementById('lang-he').addEventListener('click', () => setLanguage('he'));
-    }
+            currentFolderNameHeader.textContent = folderName;
+            folderContentTitleHeader.textContent = `${translate('folderContents')} ${folderName}`;
+            fetchFiles(folderId);
+        };
 
-    setLanguage(currentLang);
-    setupEventListeners();
-    checkUserSession();
-});
+        const fetchFiles = async (folderId, searchDate = null) => {
+            showLoading();
+            let query = supabaseClient.from('files').select('*').eq('folder_id', folderId).order('created_at', { ascending: false });
+            if (searchDate) {
+                const startDate = `${searchDate}T00:00:00`;
+                const endDate = `${searchDate}T23:59:59`;
+                query = query.gte('created_at', startDate).lte('created_at', endDate);
+            }
+            const { data, error } = await query;
+            hideLoading();
+            if (error) console.error('Error fetching files:', error);
+            else { filesCache = data || []; renderFiles(filesCache); }
+        };
+        
+        const renderFiles = (files) => {
+            filesList.innerHTML = '';
+            if (files.length === 0) { filesList.innerHTML = `<p>${translate('emptyFolder')}</p>`; return; }
+            files.forEach(file => {
+                const icon = file.type === 'note' ? 'fa-sticky-note' : (file.type === 'image' ? 'fa-image' : 'fa-video');
+                const fileEl = document.createElement('div');
+                fileEl.className = 'card';
+                fileEl.dataset.id = file.id;
+                fileEl.innerHTML = `<h4><i class="fas ${icon}"></i> ${file.name}</h4><p>${file.type === 'note' ? ((file.content || '').substring(0, 50) + '...') : `${translate('fileType')} ${file.type}`}</p><div class="card-footer"><span>${new Date(file.created_at).toLocaleDateString()}</span><div class="card-actions"><button class="delete-file" title="${translate('delete')}"><i class="fas fa-trash"></i></button></div></div>`;
+                filesList.appendChild(fileEl);
+            });
+        };
+        
+        const openMediaViewer = async (fileId) => {
+            const file = filesCache.find(f => f.id === fileId);
+            if (!file) return;
+            mediaTitle.textContent = file.name;
+            imageViewer.classList.add('hidden'); videoViewer.classList.add('hidden'); textViewer.classList.add('hidden');
+            setActiveView('mediaViewer');
+            if (file.type === 'note') {
+                textDisplay.textContent = file.content;
+                textViewer.classList.remove('hidden');
+            } else if (file.file_path) {
+                showLoading();
+                const { data, error } = await supabaseClient.storage.from('uploads').createSignedUrl(file.file_path, 3600);
+                hideLoading();
+                if (error) { alert(translate('alertLinkError') + error.message); setActiveView('folderContent'); return; }
+                if (file.type === 'image') { imageDisplay.src = data.signedUrl; imageViewer.classList.remove('hidden'); }
+                else if (file.type === 'video') { videoDisplay.src = data.signedUrl; videoViewer.classList.remove('hidden'); }
+            }
+        };
+
+        const fetchLogs = async () => {
+            if (!currentUser) return;
+            showLoading();
+            const { data: logs, error } = await supabaseClient.from('logs').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(100);
+            hideLoading();
+            if(error) { console.error('Error fetching logs:', error); return; }
+            renderLogs(logs || []);
+        };
+        
+        const renderLogs = (logs) => {
+            logsList.innerHTML = '';
+            if (logs.length === 0) { logsList.innerHTML = `<p>${translate('noLogs')}</p>`; return; }
+            logs.forEach(log => {
+                const logEl = document.createElement('div');
+                logEl.className = 'log-item';
+                const actionKey = `log${log.action.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('')}`;
+                const actionText = translate(actionKey);
+                const detailsText = log.details && log.details.name ? `"${log.details.name}"` : '';
+                logEl.innerHTML = `<p>${actionText} <strong>${detailsText}</strong></p><span>${new Date(log.created_at).toLocaleString()}</span>`;
+                logsList.appendChild(logEl);
+            });
+        };
+
+        // --- 6. EVENT LISTENERS SETUP ---
+        function setupEventListeners() {
+            loginForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = loginForm.querySelector('#login-email').value; const password = loginForm.querySelector('#login-password').value; const { error } = await supabaseClient.auth.signInWithPassword({ email, password }); hideLoading(); if (error) alert(error.message); else checkUserSession(); });
+            signupForm.addEventListener('submit', async (e) => { e.preventDefault(); showLoading(); const email = signupForm.querySelector('#signup-email').value; const password = signupForm.querySelector('#signup-password').value; const { error } = await supabaseClient.auth.signUp({ email, password }); hideLoading(); if (error) alert(error.message); else alert(translate('alertConfirmEmail')); });
+            logoutButton.addEventListener('click', async () => { showLoading(); await supabaseClient.auth.signOut(); hideLoading(); checkUserSession(); });
+            showSignupLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'block'; loginForm.parentElement.style.display = 'none'; });
+            showLoginLink.addEventListener('click', (e) => { e.preventDefault(); signupContainer.style.display = 'none'; loginForm.parentElement.style.display = 'block'; });
+
+            addFolderButton.addEventListener('click', () => { folderForm.reset(); folderIdInput.value = ''; folderModalTitle.textContent = translate('newFolderModalTitle'); showModal(folderModal); });
+            addFileButton.addEventListener('click', () => { fileForm.reset(); fileTypeSelect.dispatchEvent(new Event('change')); showModal(fileModal); });
+            closeButtons.forEach(btn => btn.addEventListener('click', hideModals));
+
+            folderForm.addEventListener('submit', async (e) => {
+                e.preventDefault(); showLoading(); const name = folderNameInput.value; const description = folderDescriptionInput.value; const folderId = folderIdInput.value;
+                if (folderId) {
+                    const { error } = await supabaseClient.from('folders').update({ name, description }).eq('id', folderId);
+                    hideLoading(); if (error) alert(error.message); else { hideModals(); fetchFolders(searchInput.value); }
+                } else {
+                    const { data: newFolder, error } = await supabaseClient.from('folders').insert({ name, description, user_id: currentUser.id }).select().single();
+                    hideLoading();
+                    if (error) alert(error.message);
+                    else if (newFolder) { hideModals(); foldersCache.unshift(newFolder); renderFolders(foldersCache); logAction('CREATE_FOLDER', { name }); }
+                }
+            });
+
+            fileForm.addEventListener('submit', async (e) => {
+                e.preventDefault(); showLoading(); const name = fileNameInput.value; const type = fileTypeSelect.value;
+                const fileData = { name, type, folder_id: currentFolderId, user_id: currentUser.id };
+                try {
+                    if (type !== 'note') {
+                        const file = fileUploadInput.files[0];
+                        if (!file) throw new Error(translate('alertChooseFile'));
+                        const filePath = `${currentUser.id}/${currentFolderId}/${Date.now()}-${file.name}`;
+                        const { error: uploadError } = await supabaseClient.storage.from('uploads').upload(filePath, file);
+                        if (uploadError) throw uploadError;
+                        fileData.file_path = filePath;
+                    } else { fileData.content = noteContentInput.value; }
+                    const { data: newFile, error: insertError } = await supabaseClient.from('files').insert(fileData).select().single();
+                    if (insertError) throw insertError;
+                    if (newFile) { hideModals(); filesCache.unshift(newFile); renderFiles(filesCache); logAction('CREATE_FILE', { name }); }
+                } catch (error) { alert(error.message); }
+                finally { hideLoading(); }
+            });
+
+            foldersList.addEventListener('click', async (e) => {
+                const button = e.target.closest('button'); const card = e.target.closest('.card'); if (!card) return;
+                if (button) {
+                    const folderId = card.dataset.id; const folderName = card.dataset.name;
+                    if (button.classList.contains('edit-folder')) {
+                        const folder = foldersCache.find(f => f.id === folderId);
+                        if (folder) { folderIdInput.value = folder.id; folderNameInput.value = folder.name; folderDescriptionInput.value = folder.description; folderModalTitle.textContent = translate('editFolderModalTitle'); showModal(folderModal); }
+                    } else if (button.classList.contains('delete-folder')) {
+                        if (confirm(translate('confirmDeleteFolder'))) {
+                            showLoading(); await supabaseClient.from('files').delete().eq('folder_id', folderId); await supabaseClient.from('folders').delete().eq('id', folderId); hideLoading();
+                            foldersCache = foldersCache.filter(f => f.id !== folderId); renderFolders(foldersCache); logAction('DELETE_FOLDER', { name: folderName });
+                        }
+                    }
+                } else { openFolder(card.dataset.id, card.dataset.name); }
+            });
+
+            filesList.addEventListener('click', async (e) => {
+                const button = e.target.closest('button'); const card = e.target.closest('.card'); if (!card) return;
+                const fileId = card.dataset.id;
+                if (button && button.classList.contains('delete-file')) {
+                    if (confirm(translate('confirmDeleteItem'))) {
+                        const file = filesCache.find(f => f.id === fileId); if (!file) return;
+                        showLoading(); if (file.file_path) await supabaseClient.storage.from('uploads').remove([file.file_path]); await supabaseClient.from('files').delete().eq('id', fileId); hideLoading();
+                        filesCache = filesCache.filter(f => f.id !== fileId); renderFiles(filesCache); logAction('DELETE_FILE', { name: file.name });
+                    }
+                } else { openMediaViewer(fileId); }
+            });
+
+            searchInput.addEventListener('input', (e) => fetchFolders(e.target.value));
+            dateSearchInput.addEventListener('input', (e) => fetchFiles(currentFolderId, e.target.value));
+            fileTypeSelect.addEventListener('change', () => { const isNote = fileTypeSelect.value === 'note'; noteContentWrapper.classList.toggle('hidden', !isNote); fileUploadWrapper.classList.toggle('hidden', isNote); });
+
+            bottomNav.addEventListener('click', (e) => { const navItem = e.target.closest('.nav-item'); if (navItem?.dataset.view) setActiveView(navItem.dataset.view); });
+            document.querySelectorAll('.back-button').forEach(btn => btn.addEventListener('click', () => setActiveView('main')));
+            document.querySelector('.back-button-media').addEventListener('click', () => { videoDisplay.pause(); videoDisplay.src = ''; setActiveView('folderContent'); });
+            
+            document.getElementById('lang-ar').addEventListener('click', () => setLanguage('ar'));
+            document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+            document.getElementById('lang-he').addEventListener('click', () => setLanguage('he'));
+        }
+
+        // --- 7. INITIALIZATION ---
+        setLanguage(currentLang);
+        setupEventListeners();
+        checkUserSession();
+    });
     </script>
 </body>
 </html>
